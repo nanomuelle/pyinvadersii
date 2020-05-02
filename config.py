@@ -50,6 +50,7 @@ gameConfig = {
             },
         },
         "alien": {
+            "tag": "alien",
             "components": {
                 "Velocity": { "colVel": 0.0, "rowVel": 0.0 },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4 },
@@ -65,6 +66,7 @@ gameConfig = {
         "initialActors": {
             "gun": {},
             "alienArmy": {
+                "tag": "alien-army",
                 "components": {
                    "AlienArmyController": {
                         "actor": "alien",
