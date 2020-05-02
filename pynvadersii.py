@@ -187,6 +187,21 @@ class Invaders:
                 sys.exit()
             actionRunner(action.get('params'))
         self.actions = []
+    
+    def checkCollisions(self):
+        bullet = self.findActorByTag('gun-bullet')
+        army = self.findActorByTag('alien-army')
+        if bullet:
+            for alienId in army.getComponent('AlienArmyController').aliens:
+                alien = self.actors.get(alienId, False)
+                if alien:
+                    if bullet.row == alien.row and bullet.col >= alien.col and bullet.col <= alien.col + 3:
+                        self.eventManager.enqueue({
+                            'name': 'on_collision',
+                            'data': (bullet.id, alien.id)
+                        })
+                        break
+            
 
     def start(self):
         print()
@@ -195,6 +210,7 @@ class Invaders:
             userInput = self.scanUserInput()
             self.gameLogic(userInput)
             self.processActions(userInput)
+            self.checkCollisions()
             self.eventManager.dispatchEvents()
             self.gameOver = userInput[0]
             self.render()

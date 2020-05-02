@@ -2,7 +2,7 @@ import copy
 from .actorComponent import ActorComponent
 
 class AlienArmyControllerComponent(ActorComponent):
-    componentType = "AllienArmyController"
+    componentType = "AlienArmyController"
 
     def __init__(self, actorId):
         ActorComponent.__init__(self, actorId)
@@ -40,7 +40,19 @@ class AlienArmyControllerComponent(ActorComponent):
                 self.aliens.append(alien.id)
         self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
         self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
+        self.game.eventManager.bind(on_collision=self.handleCollision)
     
+    def handleCollision(self, *args, **kwargs):
+        data = kwargs.get('data')
+        self.game.addActions(
+            self.actorId,
+            [{'name': 'removeActor', 'params': data[0] }]
+        )
+        self.game.addActions(
+            self.actorId,
+            [{'name': 'removeActor', 'params': data[1] }]
+        )
+
     def handleBounds(self, *args, **kwargs):
         data = kwargs.get('data')
         if data in self.aliens:

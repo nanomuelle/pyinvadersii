@@ -80,6 +80,7 @@ gameConfig = {
             "score": {},
             "gun": {},
             "alienArmy": {
+                "tag": "alien-army",
                 "components": {
                    "AlienArmyController": {
                         "actor": "alien",
