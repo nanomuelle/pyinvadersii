@@ -50,6 +50,7 @@ gameConfig = {
             },
         },
         "alien": {
+            "tag": "alien",
             "components": {
                 "Velocity": { "colVel": 0.0, "rowVel": 0.0 },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4 },
@@ -58,11 +59,25 @@ gameConfig = {
                     [c.BOLD + c.FG_COLOR_CYAN + "╘", "H", "╛" + c.RESET]
                 ], "frame": 0}
             }
+        },
+        "score": {
+            "tag": "score",
+            "row": 0,
+            "col": cols - 13,
+            "components": {
+                "ScoreController": {
+                    "points": {
+                        "alien": 10
+                    }
+                },
+                "AnsiRender": {"sprite": ["SCORE:------"]}
+            }
         }
     },
     "scene": {
         "description": "GAMEPLAY",
         "initialActors": {
+            "score": {},
             "gun": {},
             "alienArmy": {
                 "components": {

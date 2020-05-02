@@ -7,6 +7,7 @@ from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
 from .components.horizontalBoundsComponent import HorizontalBoundsComponent
+from .components.scoreControllerComponent import ScoreControllerComponent
 from .components.velocityComponent import VelocityComponent
 from .components.verticalBoundsComponent import VerticalBoundsComponent
 
@@ -18,6 +19,7 @@ ComponentFactory = {
     "FollowActor": FollowActorComponent,
     "GunRender": GunRenderComponent,
     "HorizontalBounds": HorizontalBoundsComponent,
+    "ScoreController": ScoreControllerComponent,
     "Velocity": VelocityComponent,
     "VerticalBounds": VerticalBoundsComponent
 }
