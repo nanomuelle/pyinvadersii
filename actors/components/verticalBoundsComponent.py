@@ -21,10 +21,11 @@ class VerticalBoundsComponent(ActorComponent):
 
     def update(self, deltaTime):
         actor = self.getActor()
+        game = self.game
         if actor.row < self.minRow:
             actor.setPos(self.minRow, actor.col)
-            self.game.addActions(self.actorId, self.onMinActions)
+            game.addActions(self.actorId, self.onMinActions)
 
         if actor.row > self.maxRow:
             actor.setPos(self.maxRow, actor.col)
-            self.game.addActions(self.actorId, self.onMaxActions)
+            game.addActions(self.actorId, self.onMaxActions)

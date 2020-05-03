@@ -67,8 +67,10 @@ class Invaders:
         self.aliensDelayCounter = 0
         self.aliensDelay = sceneCfg.get('aliensDelay')
 
-        for (actorKey, sceneActorCfg) in sceneCfg.get('initialActors').items():
-            actorCfg = {**actorsCfg.get(actorKey, {}), **sceneActorCfg}
+        for sceneActorCfg in sceneCfg.get('initialActors', []):
+            template = sceneActorCfg.get('template', "")
+            actorTemplate = copy.deepcopy(actorsCfg.get(template, {}))
+            actorCfg = {**actorTemplate, **sceneActorCfg}
             actor = Actor()
             actor.init(self, actorCfg)
             self.actors[actor.id] = actor

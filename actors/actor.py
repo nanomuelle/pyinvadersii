@@ -1,6 +1,7 @@
 import sys
 
 from .components.alienArmyControllerComponent import AlienArmyControllerComponent
+from .components.alienControlledComponent import AlienControlledComponent
 from .components.alienRenderComponent import AlienRenderComponent
 from .components.ansiRenderComponent import AnsiRenderComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
@@ -15,6 +16,7 @@ from .components.verticalBoundsComponent import VerticalBoundsComponent
 
 ComponentFactory = {
     "AlienArmyController": AlienArmyControllerComponent,
+    "AlienController": AlienControlledComponent,
     "AlienRender": AlienRenderComponent,
     "AnsiRender": AnsiRenderComponent,
     "ControlledByUser": ControlledByUserComponent,

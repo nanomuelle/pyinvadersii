@@ -1,4 +1,5 @@
 from .ansiRenderComponent import AnsiRenderComponent
+import constants as c
 
 class TextRenderComponent(AnsiRenderComponent):
     componentType = "Render"

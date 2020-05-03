@@ -13,5 +13,3 @@ class AlienRenderComponent(AnsiRenderComponent):
         actor = self.getActor()
         if not actor:
             return
-        if int(actor.pos[1]) != int(actor.oldPos[1]):
-            self.frame = (self.frame + 1) % len(self.sprite)

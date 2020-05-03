@@ -15,6 +15,8 @@ class FireControllerComponent(ActorComponent):
         self.bulletCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('bullet')))
         self.rowOffset = cfg.get('rowOffset', 0)
         self.colOffset = cfg.get('colOffset', 0)
+        self.bulletId = 0
+        game.eventManager.bind(on_actor_removed=self.handleBulletRemoved)
 
     def recharge(self):
         if self.ammo == 0:
@@ -36,14 +38,16 @@ class FireControllerComponent(ActorComponent):
             'col': actor.col + self.colOffset
         })
         self.bulletId = bullet.id
-        game.eventManager.bind(on_actor_removed=self.handleBulletRemoved)
         game.addActions(
             actor.id,
             [{'name': 'addActor', 'params': bullet }]
         )
+        # print("alien {} fired bullet {}".format(self.actorId, self.bulletId))
 
     def handleBulletRemoved(self, *args, **kwargs):
         data = kwargs.get('data')
+        # print('  handleBulletRemoved {} waiting {}'.format(data, self.bulletId))
         if data == self.bulletId:
             self.bulletId = 0
             self.recharge()
+            # print("alien {} recharged".format(self.alienId))
