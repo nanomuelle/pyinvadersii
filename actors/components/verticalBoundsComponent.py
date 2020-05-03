@@ -13,18 +13,18 @@ class VerticalBoundsComponent(ActorComponent):
         self.onMaxActions = cfg.get('onMaxActions', [])
         self.onMinActions = cfg.get('onMinActions', [])
 
-    def update(self, userInput):
-        actor = self.getActor()
-        if actor.row < self.minRow:
-            actor.row = self.minRow
-            self.game.addActions(self.actorId, self.onMinActions)
-
-        if actor.row > self.maxRow:
-            actor.row = self.maxRow
-            self.game.addActions(self.actorId, self.onMaxActions)
-
     def isAtMinBound(self):
         return self.getActor().row == self.minRow
 
     def isAtMaxBound(self):
         return self.getActor().row == self.maxRow
+
+    def update(self, deltaTime):
+        actor = self.getActor()
+        if actor.row < self.minRow:
+            actor.setPos(self.minRow, actor.col)
+            self.game.addActions(self.actorId, self.onMinActions)
+
+        if actor.row > self.maxRow:
+            actor.setPos(self.maxRow, actor.col)
+            self.game.addActions(self.actorId, self.onMaxActions)

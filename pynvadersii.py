@@ -49,12 +49,12 @@ class Invaders:
         actor.init(self, actorCfg)
         return actor
 
-    def addActorAction(self, actor):
+    def addActorAction(self, deltaTime, actor):
         self.actors[actor.id] = actor
         self.eventManager.enqueue({'name': 'on_actor_added', 'data': actor.id})
         # print("addActorAction actor: {} actors: {}".format(actor, self.actors.keys()))
 
-    def removeActorAction(self, params):
+    def removeActorAction(self, deltaTime, params):
         if params in self.actors:
             del self.actors[params]
             self.eventManager.enqueue({ 'name': 'on_actor_removed', 'data': params })
@@ -140,7 +140,7 @@ class Invaders:
     # def drawActor(self, actor):
     #     self.screen.drawChars(actor.row, actor.col, actor.getCurrentSprite())
 
-    def render(self):
+    def render(self, deltaTime):
         self.screen.clear()
         for (_, actor) in self.actors.items():
             renderComponent = actor.components.get('Render', False)
@@ -152,15 +152,6 @@ class Invaders:
                 )
         self.screen.render()
 
-    # def render(self):
-    #     self.screen.clear()
-    #     for alien in self.aliens:
-    #         self.drawActor(alien)
-    #     self.drawActor(self.gun)
-    #     self.drawActor(self.bullet)
-
-    #     self.screen.render()
-
     def scanUserInput(self):
         return (
             keyboard.is_pressed(self.exitKey),
@@ -169,26 +160,22 @@ class Invaders:
             keyboard.is_pressed(self.playerFireKey)
         )
 
-    def gameLogic(self, userInput):
+    def gameLogic(self, deltaTime):
         for (_, actor) in self.actors.items():
             for (_, component) in actor.components.items():
-                component.update(userInput)
-        # self.moveAliens()
-        # self.moveGun(userInput)
-        # self.moveBullet(userInput)
-        # self.gameOver = userInput[0]
+                component.update(deltaTime)
 
-    def processActions(self, userInput):
+    def processActions(self, deltaTime):
         for action in self.actions:
             actionName = action.get('name')
             actionRunner = self.actionRunners.get(actionName, False)
             if not actionRunner:
                 print("Error: action desconocida '{}'".format(actionName))
                 sys.exit()
-            actionRunner(action.get('params'))
+            actionRunner(deltaTime, action.get('params'))
         self.actions = []
     
-    def checkCollisions(self):
+    def checkCollisions(self, deltaTime):
         bullet = self.findActorByTag('gun-bullet')
         army = self.findActorByTag('alien-army')
         if bullet:
@@ -202,18 +189,25 @@ class Invaders:
                         })
                         break
             
-
     def start(self):
         print()
+        self.lastTime = time.time()
         while not self.gameOver:
-            time.sleep(self.frameDelay)        
-            userInput = self.scanUserInput()
-            self.gameLogic(userInput)
-            self.processActions(userInput)
-            self.checkCollisions()
-            self.eventManager.dispatchEvents()
-            self.gameOver = userInput[0]
-            self.render()
+            self.currentTime = time.time()
+            deltaTime = self.currentTime - self.lastTime
+            self.lastTime = self.currentTime
+
+            self.userInput = self.scanUserInput()
+            self.gameLogic(deltaTime)
+            self.processActions(deltaTime)
+            self.checkCollisions(deltaTime)
+            self.eventManager.dispatchEvents(deltaTime)
+            self.render(deltaTime)
+            self.gameOver = self.userInput[0]
+
+            remainingTime = self.frameDelay - deltaTime
+            if remainingTime > 0:
+                time.sleep(remainingTime)       
             
 game = Invaders(gameConfig)
 game.start()

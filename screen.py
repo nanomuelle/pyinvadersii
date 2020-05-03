@@ -26,12 +26,11 @@ class Screen:
 
     def render(self):
         print(" ┌" + "─" * self.cols + "┐")
-        print(" │ ASCII SPACE INVADERS       SCORE: 0000 │")
         for row in self.screen:
             print(" │" + c.RESET + self.bgcolor + "".join(row) + c.RESET + "│")
         print(" └" + "─" * self.cols + "┘")
         # sys.stdout.write
         print(
             console.cursorLeft(self.cols + 3) +
-            console.cursorUp(self.rows + 4),
+            console.cursorUp(self.rows + 3),
         )

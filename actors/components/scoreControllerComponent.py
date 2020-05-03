@@ -15,6 +15,6 @@ class ScoreControllerComponent(ActorComponent):
 
     def calculateScore(self, *args, **kwargs):
         self.score += self.pointsPerAlien
-        
-    def update(self, userInput):
-        pass
+        actor = self.getActor()
+        renderComponent = actor.getComponent('Render')
+        renderComponent.setValue(str(self.score).zfill(6))

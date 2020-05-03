@@ -14,5 +14,3 @@ class AnsiRenderComponent(ActorComponent):
     def getCurrentSprite(self):
         return self.sprite[self.frame]
 
-    def update(self, userInput):
-        return

@@ -16,7 +16,7 @@ class EventManager(Dispatcher):
     def enqueue(self, event):
         self.events.append(event)
 
-    def dispatchEvents(self):
+    def dispatchEvents(self, deltaTime):
         while len(self.events) > 0:
             event = self.events.pop(0)
             self.emit(event.get('name'), data = event.get('data', False))

@@ -47,6 +47,3 @@ class FireControllerComponent(ActorComponent):
         if data == self.bulletId:
             self.bulletId = 0
             self.recharge()
-
-    def update(self, userInput):
-        pass

@@ -6,7 +6,7 @@ class GunRenderComponent(AnsiRenderComponent):
     def __init__(self, actorId):
         AnsiRenderComponent.__init__(self, actorId)
     
-    def update(self, userInput):
+    def update(self, deltTime):
         actor = self.getActor()
         if not actor:
             return

@@ -54,10 +54,13 @@ gameConfig = {
             "components": {
                 "Velocity": { "colVel": 0.0, "rowVel": 0.0 },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4 },
-                "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_CYAN + "╒", "H", "╕" + c.RESET], 
-                    [c.BOLD + c.FG_COLOR_CYAN + "╘", "H", "╛" + c.RESET]
-                ], "frame": 0}
+                "AlienRender": {
+                    "sprite": [
+                        [c.BOLD + c.FG_COLOR_CYAN + "╒", "H", "╕" + c.RESET], 
+                        [c.BOLD + c.FG_COLOR_CYAN + "╘", "H", "╛" + c.RESET]
+                    ], 
+                    "frame": 0
+                }
             }
         },
         "score": {
@@ -66,17 +69,25 @@ gameConfig = {
             "col": cols - 13,
             "components": {
                 "ScoreController": {
-                    "points": {
-                        "alien": 10
-                    }
+                    "pointsPerAlien": 10,
                 },
-                "AnsiRender": {"sprite": ["SCORE:------"]}
+                "TextRender": {
+                    "text": "SCORE:{}",
+                    "value": '000000'
+                }
             }
         }
     },
     "scene": {
         "description": "GAMEPLAY",
         "initialActors": {
+            "levelName": {
+                "row": 0,
+                "col": 1,
+                "components": {
+                    "TextRender": { "text": "SPACE INVADERS"}
+                }
+            },
             "score": {},
             "gun": {},
             "alienArmy": {

@@ -11,8 +11,9 @@ class VelocityComponent(ActorComponent):
         self.rowVel = cfg.get('rowVel', 0.0)
         self.colVel = cfg.get('colVel', 0.0)
 
-    def update(self, userInput):
+    def update(self, deltaTime):
         actor = self.getActor()
-        if (actor):
-            actor.col += self.colVel
-            actor.row += self.rowVel
+        actor.setPos(
+            actor.row + self.rowVel, 
+            actor.col + self.colVel
+        )

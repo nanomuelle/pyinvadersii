@@ -11,3 +11,6 @@ class ActorComponent:
         if actorId == 0:
             return self.game.actors.get(self.actorId, False)
         return self.game.actors.get(actorId, False)
+
+    def update(self, deltaTime):
+        pass

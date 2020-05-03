@@ -16,7 +16,7 @@ class FollowActorComponent(ActorComponent):
         else:
             self.followedActorId = False
 
-    def update(self, userInput):
+    def update(self, deltaTime):
         if not self.followedActorId:
             return
         actor = self.getActor()

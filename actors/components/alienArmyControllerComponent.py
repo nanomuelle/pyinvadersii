@@ -11,9 +11,6 @@ class AlienArmyControllerComponent(ActorComponent):
         ActorComponent.init(self, game)
         self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('actor')))
         self.vel = cfg.get("vel", 1 / 20)
-        # self.direction = cfg.get("initialDirection", 1)
-        # self.delay = cfg.get("delay", 20)
-        # self.delayCounter = 0
         self.rows = cfg.get("aliensRows", 4)
         self.perRow = cfg.get("aliensPerRow", 8)
         self.step = cfg.get("aliensStep", 4)
@@ -62,34 +59,11 @@ class AlienArmyControllerComponent(ActorComponent):
         for alienId in self.aliens:
             alien = self.getActor(alienId)
             if alien:
-                alien.row += 1
+                alien.setPos(alien.row + 1, alien.col)
                 velocityComponent = alien.getComponent('Velocity')
                 velocityComponent.colVel = self.vel
 
-    # def moveAliens(self):
-        # self.delayCounter = (self.delayCounter + 1) % self.delay
-        # if (self.delayCounter == 0):
-        #     changeDirection = False
-        #     for alienId in self.aliens:
-        #         alien = self.getActor(alienId)
-        #         if alien:
-        #             renderComponent = alien.getComponent('Render')
-        #             renderComponent.frame = (renderComponent.frame + 1) % 2
-        #         if abs(self.direction) == 2:
-        #             alien.row += 1
-        #             changeDirection = True
-        #         else:
-        #             alien.col = alien.col + self.direction
-        #             if alien.col > self.game.cols - 4 or alien.col < 1:
-        #                 changeDirection = True
-
-            # if changeDirection:
-            #     if abs(self.direction) == 2:
-            #         self.direction = self.direction // 2
-            #     else:
-            #         self.direction = -2 * self.direction
-
-    def update(self, userInput):
+    def update(self, deltaTime):
         if self.state == 'UNINITIALIZED':
             self.createAliens()
             self.state = 'READY'
@@ -99,7 +73,3 @@ class AlienArmyControllerComponent(ActorComponent):
             self.vel = -self.vel
             self.adjustAlienVelocity()
             self.state = 'READY'
-
-        # if self.state == 'READY':
-        #     self.moveAliens()
-        #     return

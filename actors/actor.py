@@ -1,6 +1,7 @@
 import sys
 
 from .components.alienArmyControllerComponent import AlienArmyControllerComponent
+from .components.alienRenderComponent import AlienRenderComponent
 from .components.ansiRenderComponent import AnsiRenderComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
 from .components.fireControllerComponent import FireControllerComponent
@@ -8,11 +9,13 @@ from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
 from .components.horizontalBoundsComponent import HorizontalBoundsComponent
 from .components.scoreControllerComponent import ScoreControllerComponent
+from .components.textRenderComponent import TextRenderComponent
 from .components.velocityComponent import VelocityComponent
 from .components.verticalBoundsComponent import VerticalBoundsComponent
 
 ComponentFactory = {
     "AlienArmyController": AlienArmyControllerComponent,
+    "AlienRender": AlienRenderComponent,
     "AnsiRender": AnsiRenderComponent,
     "ControlledByUser": ControlledByUserComponent,
     "FireController": FireControllerComponent,
@@ -20,6 +23,7 @@ ComponentFactory = {
     "GunRender": GunRenderComponent,
     "HorizontalBounds": HorizontalBoundsComponent,
     "ScoreController": ScoreControllerComponent,
+    "TextRender": TextRenderComponent,
     "Velocity": VelocityComponent,
     "VerticalBounds": VerticalBoundsComponent
 }
@@ -49,9 +53,21 @@ class Actor:
         # print("Actor.init id: {} cfg: {}".format(self.id, cfg))
         self.tag = cfg.get('tag', 'actor-{}'.format(self.id))
         self.game = game
-        self.row = cfg.get('row', -1000)
-        self.col = cfg.get('col', -1000)
+        self.oldPos = (-1000, -1000)
+        self.pos = (cfg.get('row', -1000), cfg.get('col', -1000))
         self.createComponents(cfg)
+
+    def setPos(self, row, col):
+        self.oldPos = tuple(self.pos)
+        self.pos = (row, col)
+
+    @property
+    def col(self):
+        return self.pos[1]
+
+    @property
+    def row(self):
+        return self.pos[0]
 
     def createComponents(self, cfg):
         for (componentName, componentCfg) in cfg['components'].items():
@@ -65,21 +81,3 @@ class Actor:
             print("Error: {} component not found in actor {}".format(componentType, self))
             sys.exit()
         return component
-
-    # def getCurrentSprite(self):
-    #     return self.sprite[self.frame]
-
-class BulletActor(Actor):
-    def __init__(self, actorCfg):
-        Actor.__init__(self)
-        self.fired = actorCfg['fired']
-
-# class GunActor(Actor):
-#     def __init__(self, row, col, sprite, frame):
-#         Actor.__init__(self, row, col, sprite, frame)
-
-# class AlienActor(Actor):
-#     def __init__(self, row, col, sprite, frame):
-#         Actor.__init__(self, row, col, sprite, frame)    
-
-

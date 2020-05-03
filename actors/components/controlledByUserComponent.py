@@ -12,12 +12,16 @@ class ControlledByUserComponent(ActorComponent):
         self.moveRightInputIndex = cfg['moveRightInputIndex']
         self.fireInputIndex = cfg.get('fireInputIndex', 3)
 
-    def update(self, userInput):
+    def update(self, deltaTime):
         actor = self.getActor()
+        incCol = 0
+        userInput = self.game.userInput
         if userInput[self.moveLeftInputIndex]:
-            actor.col = actor.col - 1
+            incCol -= 1
         if userInput[self.moveRightInputIndex]:
-            actor.col = actor.col + 1
+            incCol += 1
+        if incCol != 0:
+            actor.setPos(actor.row, actor.col + incCol)
         if userInput[self.fireInputIndex]:
             fireController = actor.getComponent('FireController')
             fireController.fire()
