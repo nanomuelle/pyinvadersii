@@ -81,6 +81,9 @@ class Invaders:
                 return actor
         return False
 
+    def findActorsByTag(self, tag):
+        return list(filter(lambda actorId: self.actors[actorId].tag == tag, self.actors))
+
     # def createAliens(self, sceneCfg):
     #     aliensRows = sceneCfg["aliensRows"]
     #     aliensPerRow = sceneCfg['aliensPerRow']
@@ -177,9 +180,15 @@ class Invaders:
             actionRunner(deltaTime, action.get('params'))
         self.actions = []
     
+    def checkCollision(self, actor1, actor2):
+        sameRow = abs(actor1.row - actor2.row) < 1
+        sameCol = abs(actor1.col - actor2.col) < 1
+        return sameRow and sameCol
+
     def checkCollisions(self, deltaTime):
-        bullet = self.findActorByTag('gun-bullet')
         army = self.findActorByTag('alien-army')
+        shields = self.findActorsByTag('shield')
+        bullet = self.findActorByTag('gun-bullet')
         if bullet:
             for alienId in army.getComponent('AlienArmyController').aliens:
                 alien = self.actors.get(alienId, False)
@@ -190,6 +199,27 @@ class Invaders:
                             'data': (bullet.id, alien.id)
                         })
                         break
+            for shieldId in shields:
+                shield = self.actors.get(shieldId, False)
+                if shield:
+                    if self.checkCollision(bullet, shield):
+                        self.eventManager.enqueue({
+                            'name': 'on_collision',
+                            'data': (bullet.id, shield.id)
+                        })
+
+        alienBullets = self.findActorsByTag('alien-bullet')
+        for alienBulletId in alienBullets:
+            alienBullet = self.actors.get(alienBulletId, False)
+            if alienBullet:
+                for shieldId in shields:
+                    shield = self.actors.get(shieldId, False)
+                    if shield:
+                        if self.checkCollision(alienBullet, shield):
+                            self.eventManager.enqueue({
+                                'name': 'on_collision',
+                                'data': (alienBullet.id, shield.id)
+                            })
             
     def start(self):
         print()

@@ -3,7 +3,7 @@ import constants as c
 rows = 20
 cols = 40
 gameConfig = {
-    "frameDelay": 1 / 30,
+    "frameDelay": 1 / 60,
     "rows": rows,
     "cols": cols,
     "bgcolor": c.BG_COLOR_BLACK,
@@ -25,6 +25,7 @@ gameConfig = {
                         {'name': 'removeActor', 'params': 'self'},
                     ]
                 },
+                "AutodestroyCollision": {},
                 "AnsiRender": {"sprite": [
                     [c.BOLD + c.FG_COLOR_YELLOW + "|" + c.RESET]
                 ]}
@@ -41,6 +42,7 @@ gameConfig = {
                         {'name': 'removeActor', 'params': 'self'},
                     ]
                 },
+                "AutodestroyCollision": {},
                 "AnsiRender": {"sprite": [
                     [c.BOLD + c.FG_COLOR_CYAN + "╎" + c.RESET]
                 ]}
@@ -90,12 +92,28 @@ gameConfig = {
             }
         },
         "shield": {
-            "tag": "shied",
+            "tag": "shield",
             "row": rows - 4,
             "col": 0,
             "components": {
+                "ShieldController": {
+                    "maxDamage": 4,
+                    "damage": 0, 
+                    "onMaxDamageActions": [
+                        {'name': 'removeActor', 'params': 'self'},
+                    ]
+                },
                 "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_GREEN + "█", "█", "█", "█" + c.RESET]
+                    # [c.BOLD + c.FG_COLOR_GREEN + "4" + c.RESET],
+                    # [c.BOLD + c.FG_COLOR_GREEN + "3" + c.RESET],
+                    # [c.BOLD + c.FG_COLOR_GREEN + "2" + c.RESET],
+                    # [c.BOLD + c.FG_COLOR_GREEN + "1" + c.RESET],
+                    # ["0"],
+                    [c.BOLD + c.FG_COLOR_GREEN + "█" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "▓" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "▒" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "░" + c.RESET],
+                    [" "]
                 ]}
             }
         },
@@ -125,9 +143,24 @@ gameConfig = {
             { "template": "score" },
             # shields
             { "template": "shield", "col": 6 },
+            { "template": "shield", "col": 7 },
+            { "template": "shield", "col": 8 },
+            { "template": "shield", "col": 9 },
+
             { "template": "shield", "col": 14 },
+            { "template": "shield", "col": 15 },
+            { "template": "shield", "col": 16 },
+            { "template": "shield", "col": 17 },
+
             { "template": "shield", "col": 22 },
+            { "template": "shield", "col": 23 },
+            { "template": "shield", "col": 24 },
+            { "template": "shield", "col": 25 },
+
             { "template": "shield", "col": 30 },
+            { "template": "shield", "col": 31 },
+            { "template": "shield", "col": 32 },
+            { "template": "shield", "col": 33 },
             # gun
             { "template": "gun"},
             # alienArmy"

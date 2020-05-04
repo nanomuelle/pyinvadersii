@@ -1,7 +1,7 @@
 from .actorComponent import ActorComponent
 import random
 
-class AlienControlledComponent(ActorComponent):
+class AlienControllerComponent(ActorComponent):
     componentType = "AlienController"
     
     def __init__(self, actorId):

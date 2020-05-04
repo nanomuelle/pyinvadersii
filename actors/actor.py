@@ -1,23 +1,26 @@
 import sys
 
 from .components.alienArmyControllerComponent import AlienArmyControllerComponent
-from .components.alienControlledComponent import AlienControlledComponent
+from .components.alienControllerComponent import AlienControllerComponent
 from .components.alienRenderComponent import AlienRenderComponent
 from .components.ansiRenderComponent import AnsiRenderComponent
+from .components.autodestroyCollisionComponent import AutodestroyCollisionComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
 from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
 from .components.horizontalBoundsComponent import HorizontalBoundsComponent
 from .components.scoreControllerComponent import ScoreControllerComponent
+from .components.shieldControllerComponent import ShieldControllerComponent
 from .components.textRenderComponent import TextRenderComponent
 from .components.velocityComponent import VelocityComponent
 from .components.verticalBoundsComponent import VerticalBoundsComponent
 
 ComponentFactory = {
     "AlienArmyController": AlienArmyControllerComponent,
-    "AlienController": AlienControlledComponent,
+    "AlienController": AlienControllerComponent,
     "AlienRender": AlienRenderComponent,
+    "AutodestroyCollision": AutodestroyCollisionComponent,
     "AnsiRender": AnsiRenderComponent,
     "ControlledByUser": ControlledByUserComponent,
     "FireController": FireControllerComponent,
@@ -25,6 +28,7 @@ ComponentFactory = {
     "GunRender": GunRenderComponent,
     "HorizontalBounds": HorizontalBoundsComponent,
     "ScoreController": ScoreControllerComponent,
+    "ShieldController": ShieldControllerComponent,
     "TextRender": TextRenderComponent,
     "Velocity": VelocityComponent,
     "VerticalBounds": VerticalBoundsComponent

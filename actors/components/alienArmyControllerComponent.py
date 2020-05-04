@@ -20,6 +20,9 @@ class AlienArmyControllerComponent(ActorComponent):
 
         self.state = "UNINITIALIZED"
         self.aliens = []
+        self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
+        self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
+        self.game.eventManager.bind(on_collision=self.handleCollision)
 
     def createAliens(self):
         for row in range(self.initialRow, self.initialRow + self.rows):
@@ -36,23 +39,17 @@ class AlienArmyControllerComponent(ActorComponent):
                     [{'name': 'addActor', 'params': alien }]
                 )
                 self.aliens.append(alien.id)
-        self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
-        self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
-        self.game.eventManager.bind(on_collision=self.handleCollision)
     
     def handleCollision(self, *args, **kwargs):
         data = kwargs.get('data')
-        self.game.addActions(
-            self.actorId,
-            [{'name': 'removeActor', 'params': data[0] }]
-        )
-        self.game.addActions(
-            self.actorId,
-            [{'name': 'removeActor', 'params': data[1] }]
-        )
-        self.aliens.remove(data[1])
-        if len(self.aliens) == 0:
-            self.state = 'ALL DEAD'
+        if data[1] in self.aliens:
+            self.game.addActions(
+                self.actorId,
+                [{'name': 'removeActor', 'params': data[1] }]
+            )
+            self.aliens.remove(data[1])
+            if len(self.aliens) == 0:
+                self.state = 'ALL DEAD'
 
     def handleBounds(self, *args, **kwargs):
         data = kwargs.get('data')

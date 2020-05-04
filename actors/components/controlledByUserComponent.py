@@ -8,6 +8,7 @@ class ControlledByUserComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
+        self.vel = 0.5
         self.moveLeftInputIndex = cfg['moveLeftInputIndex']
         self.moveRightInputIndex = cfg['moveRightInputIndex']
         self.fireInputIndex = cfg.get('fireInputIndex', 3)
@@ -17,9 +18,9 @@ class ControlledByUserComponent(ActorComponent):
         incCol = 0
         userInput = self.game.userInput
         if userInput[self.moveLeftInputIndex]:
-            incCol -= 1
+            incCol -= self.vel
         if userInput[self.moveRightInputIndex]:
-            incCol += 1
+            incCol += self.vel
         if incCol != 0:
             actor.setPos(actor.row, actor.col + incCol)
         if userInput[self.fireInputIndex]:
