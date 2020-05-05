@@ -32,7 +32,7 @@ class AlienArmyControllerComponent(ActorComponent):
                     "row": row,
                     "col": self.initialCol + (index * self.step)
                 }
-                alienCfg['components']['Velocity']['colVel'] = self.vel
+                alienCfg['components']['Physics']['colVel'] = self.vel
                 alien = self.game.createActor(alienCfg)
                 self.game.addActions(
                     self.actorId,
@@ -61,8 +61,8 @@ class AlienArmyControllerComponent(ActorComponent):
             alien = self.getActor(alienId)
             if alien:
                 alien.setPos(alien.row + 1, alien.col)
-                velocityComponent = alien.getComponent('Velocity')
-                velocityComponent.colVel = self.vel
+                physicsComponent = alien.getComponent('Physics')
+                physicsComponent.colVel = self.vel
 
     def update(self, deltaTime):
         if self.state == 'UNINITIALIZED':

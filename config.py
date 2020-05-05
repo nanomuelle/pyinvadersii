@@ -17,7 +17,7 @@ gameConfig = {
         "gun-bullet": {
             "tag": "gun-bullet",
             "components": {
-                "Velocity": {"rowVel": -0.5},
+                "Physics": { "w": 1, "h": 1, "rowVel": -0.5 },
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows - 2,
@@ -26,15 +26,17 @@ gameConfig = {
                     ]
                 },
                 "AutodestroyCollision": {},
-                "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_YELLOW + "|" + c.RESET]
-                ]}
+                "AnsiRender": {
+                    "sprite": [
+                        [c.BOLD + c.FG_COLOR_YELLOW + "|" + c.RESET]
+                    ]
+                }
             }
         },
         "alien-bullet": {
             "tag": "alien-bullet",
             "components": {
-                "Velocity": {"rowVel": 0.2},
+                "Physics": { "w": 1, "h": 1, "rowVel": 0.2 },
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows,
@@ -53,6 +55,7 @@ gameConfig = {
             "row": float(rows - 1), "col": float(cols / 2),
             "components": {
                 "ControlledByUser": {"moveLeftInputIndex": 1, "moveRightInputIndex": 2},
+                "Physics": { "w": 3, "h": 1 },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "FireController": {
                     "ammoCapacity": 1,
@@ -70,7 +73,7 @@ gameConfig = {
         "alien": {
             "tag": "alien",
             "components": {
-                "Velocity": {"colVel": 0.0, "rowVel": 0.0},
+                "Physics": { "w": 3, "h": 1 },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "AlienController": {
                     "fireProb": 0.001
@@ -96,6 +99,7 @@ gameConfig = {
             "row": rows - 4,
             "col": 0,
             "components": {
+                "Physics": { "w": 1, "h": 1 },
                 "ShieldController": {
                     "maxDamage": 4,
                     "damage": 0, 
@@ -104,11 +108,6 @@ gameConfig = {
                     ]
                 },
                 "AnsiRender": {"sprite": [
-                    # [c.BOLD + c.FG_COLOR_GREEN + "4" + c.RESET],
-                    # [c.BOLD + c.FG_COLOR_GREEN + "3" + c.RESET],
-                    # [c.BOLD + c.FG_COLOR_GREEN + "2" + c.RESET],
-                    # [c.BOLD + c.FG_COLOR_GREEN + "1" + c.RESET],
-                    # ["0"],
                     [c.BOLD + c.FG_COLOR_GREEN + "█" + c.RESET],
                     [c.BOLD + c.FG_COLOR_GREEN + "▓" + c.RESET],
                     [c.BOLD + c.FG_COLOR_GREEN + "▒" + c.RESET],
@@ -132,7 +131,7 @@ gameConfig = {
             }
         }
     },
-    "scene": {
+    "scenes": [{
         "description": "GAMEPLAY",
         "initialActors": [
             # level name
@@ -167,7 +166,7 @@ gameConfig = {
             { "tag": "alien-army", "components": {
                 "AlienArmyController": {
                     "actor": "alien",
-                    "vel": 1.0 / 20.0,
+                    "vel": 1.0 / 30.0,
                     "ivel": 1.0 / 80.0,
                     "rows": 4,
                     "perRow": 8,
@@ -177,5 +176,41 @@ gameConfig = {
                 }
             }}
         ],
-    }
+    },
+    {
+        "description": "game over",
+        "initialActors": [
+            { "row": 10, "col": 2, "components": {"TextRender": {
+                "text": 
+                "   _____          __  __ ______    ______      ________ _____  "
+            }}},
+            { "row": 11, "col": 2, "components": {"TextRender": {
+                "text": 
+                "   / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "
+            }}},
+            { "row": 12, "col": 2, "components": {"TextRender": {
+                "text": 
+                "  | |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"
+            }}},
+            { "row": 13, "col": 2, "components": {"TextRender": {
+                "text": 
+                " | | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "
+            }}},
+            { "row": 14, "col": 2, "components": {"TextRender": {
+                "text": 
+                "  | |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "
+            }}},
+            { "row": 14, "col": 2, "components": {"TextRender": { 
+                "text": 
+                "   \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\"
+            }}}
+        ]                                                               
+    }]
 }
+
+#1    _____          __  __ ______    ______      ________ _____  
+#2   / ____|   /\   |  \/  |  ____|  / __ \ \    / /  ____|  __ \ 
+#3  | |  __   /  \  | \  / | |__    | |  | \ \  / /| |__  | |__) |
+#4  | | |_ | / /\ \ | |\/| |  __|   | |  | |\ \/ / |  __| |  _  / 
+#5  | |__| |/ ____ \| |  | | |____  | |__| | \  /  | |____| | \ \ 
+#6   \_____/_/    \_\_|  |_|______|  \____/   \/   |______|_|  \_\

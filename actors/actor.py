@@ -10,10 +10,11 @@ from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
 from .components.horizontalBoundsComponent import HorizontalBoundsComponent
+from .components.physicsComponent import PhysicsComponent
 from .components.scoreControllerComponent import ScoreControllerComponent
 from .components.shieldControllerComponent import ShieldControllerComponent
 from .components.textRenderComponent import TextRenderComponent
-from .components.velocityComponent import VelocityComponent
+# from .components.velocityComponent import VelocityComponent
 from .components.verticalBoundsComponent import VerticalBoundsComponent
 
 ComponentFactory = {
@@ -27,10 +28,11 @@ ComponentFactory = {
     "FollowActor": FollowActorComponent,
     "GunRender": GunRenderComponent,
     "HorizontalBounds": HorizontalBoundsComponent,
+    "Physics": PhysicsComponent,
     "ScoreController": ScoreControllerComponent,
     "ShieldController": ShieldControllerComponent,
     "TextRender": TextRenderComponent,
-    "Velocity": VelocityComponent,
+    # "Velocity": VelocityComponent,
     "VerticalBounds": VerticalBoundsComponent
 }
 

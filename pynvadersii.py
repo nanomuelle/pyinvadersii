@@ -10,6 +10,8 @@ from config import gameConfig
 
 class Invaders:
     def __init__(self, cfg):
+        self.cfg = cfg
+        self.sceneIndex = 0
         self.gameOver = False
         self.userInput = (False, False, False, False)
         self.actors = {}
@@ -34,8 +36,7 @@ class Invaders:
         self.actorPatterns = copy.deepcopy(cfg.get("actors"))
         
         self.screen = Screen(self.rows, self.cols, self.bgcolor)
-        self.initScene(cfg)
-
+        self.loadScene()
 
     def addActions(self, actorId, actions):
         for actionPattern in actions:
@@ -59,9 +60,10 @@ class Invaders:
             del self.actors[params]
             self.eventManager.enqueue({ 'name': 'on_actor_removed', 'data': params })
 
-    def initScene(self, cfg):
+    def loadScene(self):
+        cfg = self.cfg
         actorsCfg = cfg.get('actors')
-        sceneCfg = cfg.get('scene')
+        sceneCfg = cfg.get('scenes')[self.sceneIndex]
 
         self.aliensDirection = 1
         self.aliensDelayCounter = 0
@@ -182,8 +184,17 @@ class Invaders:
     
     def checkCollision(self, actor1, actor2):
         sameRow = abs(actor1.row - actor2.row) < 1
-        sameCol = abs(actor1.col - actor2.col) < 1
-        return sameRow and sameCol
+        if not sameRow:
+            return False
+
+        actor1W = actor1.getComponent('Physics').w        
+        cond1 = actor2.col >= actor1.col and actor2.col <= actor1.col + actor1W
+        if cond1:
+            return True
+        
+        actor2W = actor1.getComponent('Physics').w
+        return actor1.col >= actor2.col and actor1.col <= actor2.col + actor2W
+
 
     def checkCollisions(self, deltaTime):
         army = self.findActorByTag('alien-army')
@@ -220,11 +231,16 @@ class Invaders:
                                 'name': 'on_collision',
                                 'data': (alienBullet.id, shield.id)
                             })
-            
+                gun = self.findActorByTag('gun')
+                if gun:
+                    if self.checkCollision(alienBullet, gun):
+                        self.gameOver = True
+
     def start(self):
         print()
         self.lastTime = time.time()
-        while not self.gameOver:
+        exitGame = False
+        while not exitGame:
             self.currentTime = time.time()
             deltaTime = self.currentTime - self.lastTime
             self.lastTime = self.currentTime
@@ -235,7 +251,11 @@ class Invaders:
             self.checkCollisions(deltaTime)
             self.eventManager.dispatchEvents(deltaTime)
             self.render(deltaTime)
-            self.gameOver = self.userInput[0]
+            exitGame = self.userInput[0]
+
+            if self.gameOver:
+                print("GAME OVER")
+                exitGame = True
 
             remainingTime = self.frameDelay - deltaTime
             if remainingTime > 0:
