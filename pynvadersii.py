@@ -65,8 +65,11 @@ class Invaders:
         actorsCfg = cfg.get('actors')
         sceneCfg = cfg.get('scenes')[self.sceneIndex]
 
-        self.aliensDirection = 1
-        self.aliensDelayCounter = 0
+        self.actors = {}
+        self.actions = []
+
+        # self.aliensDirection = 1
+        # self.aliensDelayCounter = 0
         self.aliensDelay = sceneCfg.get('aliensDelay')
 
         for sceneActorCfg in sceneCfg.get('initialActors', []):
@@ -245,6 +248,12 @@ class Invaders:
             deltaTime = self.currentTime - self.lastTime
             self.lastTime = self.currentTime
 
+            if self.gameOver and self.sceneIndex == 0:
+                self.sceneIndex += 1
+                self.loadScene()
+                # print("GAME OVER")
+                # exitGame = True
+
             self.userInput = self.scanUserInput()
             self.gameLogic(deltaTime)
             self.processActions(deltaTime)
@@ -252,10 +261,6 @@ class Invaders:
             self.eventManager.dispatchEvents(deltaTime)
             self.render(deltaTime)
             exitGame = self.userInput[0]
-
-            if self.gameOver:
-                print("GAME OVER")
-                exitGame = True
 
             remainingTime = self.frameDelay - deltaTime
             if remainingTime > 0:
