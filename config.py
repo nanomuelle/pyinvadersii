@@ -143,6 +143,64 @@ gameConfig = {
     },
     "scenes": [
         {
+            "description": "MAIN MENU",
+            "initialActors": [
+                # title
+                {"row": 1, "col": 70, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                    "AnsiRender": {"sprite": [r" _, __,  _,  _, __,"]}
+                }},
+                {"row": 2, "col": 80, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                    "AnsiRender": {"sprite": [r"(_  |_) / \ / ` |_"]}
+                }},
+                {"row": 3, "col": 90, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                    "AnsiRender": {"sprite": [r", ) |   |~| \ , | "]}
+                }},
+                {"row": 4, "col": 100, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                    "AnsiRender": {"sprite": [r" ~  ~   ~ ~  ~  ~~~"]}
+                }},
+
+                {"row": 5, "col": 110, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                    "AnsiRender": {"sprite": ["_ _, _ _,_  _, __, __, __,  _,"]}
+                }},
+                {"row": 6, "col": 120, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                    "AnsiRender": {"sprite": ["| |\ | | / / \ | \ |_  |_) (_"]}
+                }},
+                {"row": 7, "col": 130, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                    "AnsiRender": {"sprite": ["| | \| |/  |~| |_/ |   | \ , )"]}
+                }},
+                {"row": 8, "col": 140, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                    "AnsiRender": {"sprite": ["~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
+                }},
+                {"row": 100, "col": 9, "components": {
+                    "Physics": {"rowVel": -1.5},
+                    "VerticalBounds": {"minRow": 12, "maxRow": 500},
+                    "AnsiRender": {
+                        "sprite": [
+                            [c.BOLD + c.BG_COLOR_MAGENTA + "P", "R", "E", "S", "S", " ",
+                             "A", "N", "Y", " ", "K", "E", "Y", " ", "T", "O", " ",
+                             "S", "T", "A", "R", "T" + c.RESET]
+                        ]
+                    }}
+                },
+            ]
+        },
+        {
             "description": "GAMEPLAY",
             "initialActors": [
                 # level name
@@ -260,22 +318,6 @@ gameConfig = {
                              "E", "x", "i", "t", " ", "g", "a", "m", "e" + c.RESET]
                         ]
                     }}}
-            ]
-        },
-        {
-            "description": "MAIN MENU",
-            "initialActors": [
-                # title
-                {"row": 2, "col": 0, "components": {
-                    "AnsiRender": {"sprite": [
-                        "SPACE"
-                    ]}
-                }},
-                {"row": 4, "col": 0, "components": {
-                    "AnsiRender": {"sprite": [
-                        "INVADERS"
-                    ]}
-                }}
             ]
         },
     ]
