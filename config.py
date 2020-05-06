@@ -3,7 +3,7 @@ import constants as c
 rows = 20
 cols = 40
 gameConfig = {
-    "frameDelay": 1 / 60,
+    "frameDelay": 1 / 30,
     "rows": rows,
     "cols": cols,
     "bgcolor": c.BG_COLOR_BLACK,
@@ -17,7 +17,7 @@ gameConfig = {
         "gun-bullet": {
             "tag": "gun-bullet",
             "components": {
-                "Physics": { "w": 1, "h": 1, "rowVel": -0.5 },
+                "Physics": {"w": 1, "h": 1, "rowVel": -0.5},
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows - 2,
@@ -36,7 +36,7 @@ gameConfig = {
         "alien-bullet": {
             "tag": "alien-bullet",
             "components": {
-                "Physics": { "w": 1, "h": 1, "rowVel": 0.2 },
+                "Physics": {"w": 1, "h": 1, "rowVel": 0.2},
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows,
@@ -55,7 +55,7 @@ gameConfig = {
             "row": float(rows - 1), "col": float(cols / 2),
             "components": {
                 "ControlledByUser": {"moveLeftInputIndex": 1, "moveRightInputIndex": 2},
-                "Physics": { "w": 3, "h": 1 },
+                "Physics": {"w": 3, "h": 1},
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "FireController": {
                     "ammoCapacity": 1,
@@ -73,7 +73,7 @@ gameConfig = {
         "alien": {
             "tag": "alien",
             "components": {
-                "Physics": { "w": 3, "h": 1 },
+                "Physics": {"w": 3, "h": 1},
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "AlienController": {
                     "fireProb": 0.001
@@ -99,19 +99,23 @@ gameConfig = {
             "row": rows - 4,
             "col": 0,
             "components": {
-                "Physics": { "w": 1, "h": 1 },
+                "Physics": {"w": 1, "h": 1},
                 "ShieldController": {
                     "maxDamage": 4,
-                    "damage": 0, 
+                    "damage": 0,
                     "onMaxDamageActions": [
                         {'name': 'removeActor', 'params': 'self'},
                     ]
                 },
                 "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_MAGENTA + c.BG_COLOR_WHITE + "█" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_MAGENTA + c.BG_COLOR_WHITE + "▓" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_MAGENTA + c.BG_COLOR_WHITE + "▒" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_MAGENTA + c.BG_COLOR_WHITE + "░" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_MAGENTA +
+                        c.BG_COLOR_BLUE + "█" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_MAGENTA +
+                        c.BG_COLOR_BLUE + "▓" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_MAGENTA +
+                        c.BG_COLOR_BLUE + "▒" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_MAGENTA +
+                        c.BG_COLOR_BLUE + "░" + c.RESET],
                     [" "]
                 ]}
             }
@@ -130,173 +134,174 @@ gameConfig = {
                 }
             }
         },
-        "vscroll-text": { 
-            "tag": "vscroll-text", 
+        "vscroll-text": {
+            "tag": "vscroll-text",
             "components": {
-                "Physics": { "rowVel": -0.1 }
+                "Physics": {"rowVel": -0.1}
             }
         },
     },
     "scenes": [
         {
+            "description": "GAMEPLAY",
+            "initialActors": [
+                # level name
+                {"row": 0, "col": 1, "components": {
+                    "TextRender": {"text": "SPACE INVADERS"}
+                }},
+                # score
+                {"template": "score"},
+                # shields
+                {"template": "shield", "col": 6},
+                {"template": "shield", "col": 7},
+                {"template": "shield", "col": 8},
+                {"template": "shield", "col": 9},
+
+                {"template": "shield", "col": 14},
+                {"template": "shield", "col": 15},
+                {"template": "shield", "col": 16},
+                {"template": "shield", "col": 17},
+
+                {"template": "shield", "col": 22},
+                {"template": "shield", "col": 23},
+                {"template": "shield", "col": 24},
+                {"template": "shield", "col": 25},
+
+                {"template": "shield", "col": 30},
+                {"template": "shield", "col": 31},
+                {"template": "shield", "col": 32},
+                {"template": "shield", "col": 33},
+                # gun
+                {"template": "gun"},
+                # alienArmy"
+                {"tag": "alien-army", "components": {
+                    "AlienArmyController": {
+                        "actor": "alien",
+                        "vel": 1.0 / 60.0,
+                        "ivel": 1.0 / 80.0,
+                        "rows": 4,
+                        "perRow": 8,
+                        "step": 4,
+                        "initialRow": 2,
+                        "initialCol": 5
+                    }
+                }}
+            ],
+        },
+        {
+            "description": "game over",
+            "initialActors": [
+                {"row": rows + 1, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 2, "maxRow": 100},
+                    "AnsiRender": {"sprite": [" ██████╗  █████╗ ███╗   ███╗███████╗"]}}},
+                {"row": rows + 2, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 3, "maxRow": 100},
+                    "TextRender": {"text": "██╔════╝ ██╔══██╗████╗ ████║██╔════╝"
+                                   }}},
+                {"row": rows + 3, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 4, "maxRow": 100},
+                    "TextRender": {"text": "██║  ███╗███████║██╔████╔██║█████╗  "
+                                   }}},
+                {"row": rows + 4, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 5, "maxRow": 100},
+                    "TextRender": {"text": "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  "
+                                   }}},
+                {"row": rows + 5, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 6, "maxRow": 100},
+                    "TextRender": {"text": "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗"
+                                   }}},
+                {"row": rows + 6, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 7, "maxRow": 100},
+                    "TextRender": {"text": " ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝"
+                                   }}},
+
+                {"row": rows + 12, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 8, "maxRow": 100},
+                    "TextRender": {"text": " ██████╗ ██╗   ██╗███████╗██████╗ "}}},
+                {"row": rows + 13, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 9, "maxRow": 100},
+                    "TextRender": {"text": "██╔═══██╗██║   ██║██╔════╝██╔══██╗"
+                                   }}},
+                {"row": rows + 14, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 10, "maxRow": 100},
+                    "TextRender": {"text": "██║   ██║██║   ██║█████╗  ██████╔╝"
+                                   }}},
+                {"row": rows + 15, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 11, "maxRow": 100},
+                    "TextRender": {"text": "██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗"
+                                   }}},
+                {"row": rows + 16, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 12, "maxRow": 100},
+                    "TextRender": {"text": "╚██████╔╝ ╚████╔╝ ███████╗██║  ██║"
+                                   }}},
+                {"row": rows + 17, "col": 2, "components": {
+                    "Physics": {"rowVel": -0.1},
+                    "VerticalBounds": {"minRow": 13, "maxRow": 100},
+                    "TextRender": {"text": " ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝"
+                                   }}},
+
+                {"row": 15, "col": 500, "components": {
+                    "Physics": {"colVel": -2},
+                    "HorizontalBounds": {"minCol": 12, "maxCol": 500},
+                    "AnsiRender": {
+                        "sprite": [
+                            [c.BOLD + c.BG_COLOR_MAGENTA + "[", "E", "S", "C", "]", " ",
+                             "E", "x", "i", "t", " ", "g", "a", "m", "e" + c.RESET]
+                        ]
+                    }}}
+            ]
+        },
+        {
             "description": "MAIN MENU",
             "initialActors": [
                 # title
-                { "row": 2, "col": 0, "components": {
+                {"row": 2, "col": 0, "components": {
                     "AnsiRender": {"sprite": [
                         "SPACE"
                     ]}
                 }},
-                { "row": 4, "col": 0, "components": {
+                {"row": 4, "col": 0, "components": {
                     "AnsiRender": {"sprite": [
                         "INVADERS"
                     ]}
                 }}
             ]
         },
-        {
-        "description": "GAMEPLAY",
-        "initialActors": [
-            # level name
-            { "row": 0, "col": 1, "components": {
-                "TextRender": {"text": "SPACE INVADERS"}
-            }},
-            # score
-            { "template": "score" },
-            # shields
-            { "template": "shield", "col": 6 },
-            { "template": "shield", "col": 7 },
-            { "template": "shield", "col": 8 },
-            { "template": "shield", "col": 9 },
-
-            { "template": "shield", "col": 14 },
-            { "template": "shield", "col": 15 },
-            { "template": "shield", "col": 16 },
-            { "template": "shield", "col": 17 },
-
-            { "template": "shield", "col": 22 },
-            { "template": "shield", "col": 23 },
-            { "template": "shield", "col": 24 },
-            { "template": "shield", "col": 25 },
-
-            { "template": "shield", "col": 30 },
-            { "template": "shield", "col": 31 },
-            { "template": "shield", "col": 32 },
-            { "template": "shield", "col": 33 },
-            # gun
-            { "template": "gun"},
-            # alienArmy"
-            { "tag": "alien-army", "components": {
-                "AlienArmyController": {
-                    "actor": "alien",
-                    "vel": 1.0 / 30.0,
-                    "ivel": 1.0 / 80.0,
-                    "rows": 4,
-                    "perRow": 8,
-                    "step": 4,
-                    "initialRow": 2,
-                    "initialCol": 5
-                }
-            }}
-        ],
-    },
-    {
-        "description": "game over",
-        "initialActors": [
-            { "row": rows + 1, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 2, "maxRow": 100 },
-                "AnsiRender": { "sprite": [" ██████╗  █████╗ ███╗   ███╗███████╗"] }}},
-            { "row": rows + 2, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 3, "maxRow": 100 },
-                "TextRender": { "text": "██╔════╝ ██╔══██╗████╗ ████║██╔════╝"
-            }}},
-            { "row": rows + 3, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 4, "maxRow": 100 },
-                "TextRender": { "text": "██║  ███╗███████║██╔████╔██║█████╗  "
-            }}},
-            { "row": rows + 4, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 5, "maxRow": 100 },
-                "TextRender": { "text": "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  "
-            }}},
-            { "row": rows + 5, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 6, "maxRow": 100 },
-                "TextRender": { "text": "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗"
-            }}},
-            { "row": rows + 6, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 7, "maxRow": 100 },
-                "TextRender": { "text": " ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝"
-            }}},
-
-            { "row": rows + 12, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 8, "maxRow": 100 },
-                "TextRender": { "text": " ██████╗ ██╗   ██╗███████╗██████╗ " }}},
-            { "row": rows + 13, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 9, "maxRow": 100 },
-                "TextRender": { "text": "██╔═══██╗██║   ██║██╔════╝██╔══██╗"
-            }}},
-            { "row": rows + 14, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 10, "maxRow": 100 },
-                "TextRender": { "text": "██║   ██║██║   ██║█████╗  ██████╔╝"
-            }}},
-            { "row": rows + 15, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 11, "maxRow": 100 },
-                "TextRender": { "text": "██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗"
-            }}},
-            { "row": rows + 16, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 12, "maxRow": 100 },
-                "TextRender": { "text": "╚██████╔╝ ╚████╔╝ ███████╗██║  ██║"
-            }}},
-            { "row": rows + 17, "col": 2, "components": {
-                "Physics": { "rowVel": -0.1 },
-                "VerticalBounds": { "minRow": 13, "maxRow": 100 },
-                "TextRender": { "text": " ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝"
-            }}},
-
-            { "row": 15, "col": 500, "components": {
-                "Physics": { "colVel": -2 },
-                "HorizontalBounds": { "minCol": 12, "maxCol": 500 },
-                "AnsiRender": { 
-                    "sprite": [
-                        [c.BOLD + c.BG_COLOR_MAGENTA + "[", "E", "S", "C", "]", " ", "E", "x", "i", "t", " ", "g", "a", "m", "e" + c.RESET]
-                    ]
-            }}}
-        ]                                                               
-    }]
+    ]
 }
 
-# 1      _, __,  _,  _, __,       
-# 2     (_  |_) / \ / ` |_        
-# 3     , ) |   |~| \ , |         
-# 4      ~  ~   ~ ~  ~  ~~~       
-#                             
+# 1      _, __,  _,  _, __,
+# 2     (_  |_) / \ / ` |_
+# 3     , ) |   |~| \ , |
+# 4      ~  ~   ~ ~  ~  ~~~
+#
 # 1 _ _, _ _,_  _, __, __, __,  _,
-# 2 | |\ | | / / \ | \ |_  |_) (_ 
+# 2 | |\ | | / / \ | \ |_  |_) (_
 # 3 | | \| |/  |~| |_/ |   | \ , )
-# 4 ~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~ 
-                               
+# 4 ~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~
 
-#1  ██████╗  █████╗ ███╗   ███╗███████╗
-#2 ██╔════╝ ██╔══██╗████╗ ████║██╔════╝
-#3 ██║  ███╗███████║██╔████╔██║█████╗  
-#4 ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  
-#5 ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗
-#6  ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
-                                    
-#1  ██████╗ ██╗   ██╗███████╗██████╗   
-#2 ██╔═══██╗██║   ██║██╔════╝██╔══██╗  
-#3 ██║   ██║██║   ██║█████╗  ██████╔╝  
-#4 ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗  
-#5 ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║  
-#6  ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝  
-                                    
+
+# 1  ██████╗  █████╗ ███╗   ███╗███████╗
+# 2 ██╔════╝ ██╔══██╗████╗ ████║██╔════╝
+# 3 ██║  ███╗███████║██╔████╔██║█████╗
+# 4 ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝
+# 5 ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗
+# 6  ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+
+# 1  ██████╗ ██╗   ██╗███████╗██████╗
+# 2 ██╔═══██╗██║   ██║██╔════╝██╔══██╗
+# 3 ██║   ██║██║   ██║█████╗  ██████╔╝
+# 4 ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
+# 5 ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║
+# 6  ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝

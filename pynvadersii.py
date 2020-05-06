@@ -1,12 +1,13 @@
 import sys
 import copy
-import keyboard
+# import keyboard
 import console
 import time
 from actors.actor import Actor
 from screen import Screen
 from events import EventManager
 from config import gameConfig
+from userinput import UserInput
 
 class Invaders:
     def __init__(self, cfg):
@@ -32,6 +33,9 @@ class Invaders:
         self.playerLeftKey = userInputKeys.get("playerLeftKey")
         self.playerRightKey = userInputKeys.get("playerRightKey")
         self.playerFireKey = userInputKeys.get("playerFireKey")
+
+        self.userInputSystem = UserInput();
+        self.userInputSystem.init()
 
         self.actorPatterns = copy.deepcopy(cfg.get("actors"))
         
@@ -163,12 +167,13 @@ class Invaders:
         self.screen.render()
 
     def scanUserInput(self):
-        return (
-            keyboard.is_pressed(self.exitKey),
-            keyboard.is_pressed(self.playerLeftKey),
-            keyboard.is_pressed(self.playerRightKey),
-            keyboard.is_pressed(self.playerFireKey)
-        )
+        return self.userInputSystem.scan()
+        # return (
+        #     keyboard.is_pressed(self.exitKey),
+        #     keyboard.is_pressed(self.playerLeftKey),
+        #     keyboard.is_pressed(self.playerRightKey),
+        #     keyboard.is_pressed(self.playerFireKey)
+        # )
 
     def gameLogic(self, deltaTime):
         for (_, actor) in self.actors.items():
@@ -260,6 +265,7 @@ class Invaders:
             self.checkCollisions(deltaTime)
             self.eventManager.dispatchEvents(deltaTime)
             self.render(deltaTime)
+
             exitGame = self.userInput[0]
 
             remainingTime = self.frameDelay - deltaTime
