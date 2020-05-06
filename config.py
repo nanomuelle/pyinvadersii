@@ -170,22 +170,22 @@ gameConfig = {
                 {"row": 5, "col": 110, "components": {
                     "Physics": {"colVel": -2},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
-                    "AnsiRender": {"sprite": ["_ _, _ _,_  _, __, __, __,  _,"]}
+                    "AnsiRender": {"sprite": [r"_ _, _ _,_  _, __, __, __,  _,"]}
                 }},
                 {"row": 6, "col": 120, "components": {
                     "Physics": {"colVel": -2},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
-                    "AnsiRender": {"sprite": ["| |\ | | / / \ | \ |_  |_) (_"]}
+                    "AnsiRender": {"sprite": [r"| |\ | | / / \ | \ |_  |_) (_"]}
                 }},
                 {"row": 7, "col": 130, "components": {
                     "Physics": {"colVel": -2},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
-                    "AnsiRender": {"sprite": ["| | \| |/  |~| |_/ |   | \ , )"]}
+                    "AnsiRender": {"sprite": [r"| | \| |/  |~| |_/ |   | \ , )"]}
                 }},
                 {"row": 8, "col": 140, "components": {
                     "Physics": {"colVel": -2},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
-                    "AnsiRender": {"sprite": ["~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
+                    "AnsiRender": {"sprite": [r"~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
                 }},
                 {"row": 100, "col": 9, "components": {
                     "Physics": {"rowVel": -1.5},
@@ -198,6 +198,11 @@ gameConfig = {
                         ]
                     }}
                 },
+                {
+                    "components": {
+                        "IntroScene" : {}
+                    }
+                }
             ]
         },
         {
@@ -243,7 +248,15 @@ gameConfig = {
                         "initialRow": 2,
                         "initialCol": 5
                     }
-                }}
+                }},
+                {
+                    "components": {
+                        "ClasicScene": {
+                            "lives": 3,
+                            "alienArmyTag": "alien-army" 
+                        }
+                    }
+                }
             ],
         },
         {

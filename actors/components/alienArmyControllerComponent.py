@@ -10,21 +10,24 @@ class AlienArmyControllerComponent(ActorComponent):
     def init(self, game, cfg):
         ActorComponent.init(self, game)
         self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('actor')))
-        self.vel = cfg.get("vel", 1 / 20)
-        self.ivel = cfg.get("ivel", 1 / 80)
         self.rows = cfg.get("aliensRows", 4)
         self.perRow = cfg.get("aliensPerRow", 8)
         self.step = cfg.get("aliensStep", 4)
         self.initialRow = cfg.get("initialRow", 1)
         self.initialCol = cfg.get("initialCol", 5)
+        self.initialVel = cfg.get("vel", 1 / 20)
+        self.initialIVel = cfg.get("ivel", 1 / 80)
 
-        self.state = "UNINITIALIZED"
         self.aliens = []
+        self.state = "UNINITIALIZED"
         self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
         self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
         self.game.eventManager.bind(on_collision=self.handleCollision)
 
     def createAliens(self):
+        self.vel = self.initialVel
+        self.ivel = self.initialIVel
+        self.aliens = []
         for row in range(self.initialRow, self.initialRow + self.rows):
             for index in range(self.perRow):
                 alienCfg = {
@@ -50,7 +53,11 @@ class AlienArmyControllerComponent(ActorComponent):
             self.aliens.remove(data[1])
             if len(self.aliens) == 0:
                 self.state = 'ALL DEAD'
-
+                self.game.eventManager.enqueue({
+                    'name': 'on_alienarmy_dead',
+                    'data': self.actorId
+                })
+                
     def handleBounds(self, *args, **kwargs):
         data = kwargs.get('data')
         if data in self.aliens:

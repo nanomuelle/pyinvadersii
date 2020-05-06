@@ -5,11 +5,13 @@ from .components.alienControllerComponent import AlienControllerComponent
 from .components.alienRenderComponent import AlienRenderComponent
 from .components.ansiRenderComponent import AnsiRenderComponent
 from .components.autodestroyCollisionComponent import AutodestroyCollisionComponent
+from .components.clasicSceneComponent import ClasicSceneComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
 from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
 from .components.horizontalBoundsComponent import HorizontalBoundsComponent
+from .components.introSceneComponent import IntroSceneComponent
 from .components.physicsComponent import PhysicsComponent
 from .components.scoreControllerComponent import ScoreControllerComponent
 from .components.shieldControllerComponent import ShieldControllerComponent
@@ -23,11 +25,13 @@ ComponentFactory = {
     "AlienRender": AlienRenderComponent,
     "AutodestroyCollision": AutodestroyCollisionComponent,
     "AnsiRender": AnsiRenderComponent,
+    "ClasicScene": ClasicSceneComponent,
     "ControlledByUser": ControlledByUserComponent,
     "FireController": FireControllerComponent,
     "FollowActor": FollowActorComponent,
     "GunRender": GunRenderComponent,
     "HorizontalBounds": HorizontalBoundsComponent,
+    "IntroScene": IntroSceneComponent,
     "Physics": PhysicsComponent,
     "ScoreController": ScoreControllerComponent,
     "ShieldController": ShieldControllerComponent,

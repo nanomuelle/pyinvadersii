@@ -7,7 +7,8 @@ class EventManager(Dispatcher):
         'on_actor_added',
         'on_horizontal_bounds_max_col',
         'on_horizontal_bounds_min_col',
-        'on_collision'
+        'on_collision',
+        'on_alienarmy_dead'
     ]
     
     def __init__(self):

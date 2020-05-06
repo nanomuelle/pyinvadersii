@@ -20,7 +20,8 @@ class Invaders:
         self.eventManager = EventManager()
         self.actionRunners = {
             'addActor': self.addActorAction,
-            'removeActor': self.removeActorAction
+            'removeActor': self.removeActorAction,
+            'nextScene': self.nextSceneAction
         }
 
         self.frameDelay = cfg["frameDelay"]
@@ -63,6 +64,10 @@ class Invaders:
         if params in self.actors:
             del self.actors[params]
             self.eventManager.enqueue({ 'name': 'on_actor_removed', 'data': params })
+
+    def nextSceneAction(self, deltaTime, params):
+        self.sceneIndex += 1
+        self.loadScene()
 
     def loadScene(self):
         cfg = self.cfg
