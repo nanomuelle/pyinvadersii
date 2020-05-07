@@ -35,7 +35,7 @@ class Invaders:
         self.playerRightKey = userInputKeys.get("playerRightKey")
         self.playerFireKey = userInputKeys.get("playerFireKey")
 
-        self.userInputSystem = UserInput();
+        self.userInputSystem = UserInput()
         self.userInputSystem.init()
 
         self.actorPatterns = copy.deepcopy(cfg.get("actors"))
@@ -207,7 +207,6 @@ class Invaders:
         
         actor2W = actor1.getComponent('Physics').w
         return actor1.col >= actor2.col and actor1.col <= actor2.col + actor2W
-
 
     def checkCollisions(self, deltaTime):
         army = self.findActorByTag('alien-army')

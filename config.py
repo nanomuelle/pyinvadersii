@@ -106,7 +106,7 @@ gameConfig = {
                     "onMaxActions": [{'name': 'removeActor', 'params': 'self'}] 
                 },
                 "AnsiRender": { "sprite": [
-                    [c.BOLD + c.FG_COLOR_RED + "(", "m", "m", "m", ")" + c.RESET]
+                    [c.BOLD + c.FG_COLOR_RED + "(", "═", c.BLINK + "═", "═", ")" + c.RESET]
                 ]}
             }
         },
