@@ -214,7 +214,15 @@ class Invaders:
         shields = self.findActorsByTag('shield')
         bullet = self.findActorByTag('gun-bullet')
         if bullet:
-            for alienId in army.getComponent('AlienArmyController').aliens:
+            armyController = army.getComponent('AlienArmyController')
+            ufo = self.actors.get(armyController.ufoId, False)
+            if ufo:
+                if self.checkCollision(bullet, ufo):
+                    self.eventManager.enqueue({
+                        'name': 'on_collision',
+                        'data': (bullet.id, ufo.id)
+                    })
+            for alienId in armyController.aliens:
                 alien = self.actors.get(alienId, False)
                 if alien:
                     if bullet.row == alien.row and bullet.col >= alien.col and bullet.col <= alien.col + 3:

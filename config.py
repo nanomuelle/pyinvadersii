@@ -76,7 +76,7 @@ gameConfig = {
                 "Physics": {"w": 3, "h": 1},
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "AlienController": {
-                    "fireProb": 0.001
+                    "fireProb": 0.0005
                 },
                 "FireController": {
                     "ammoCapacity": 1,
@@ -92,6 +92,22 @@ gameConfig = {
                     ],
                     "frame": 0
                 }
+            }
+        },
+        "ufo": {
+            "tag": "ufo",
+            "row": 1.0, "col": float(cols + 4),
+            "components": {
+                "Physics": {"w": 4, "h": 1, "colVel": -0.2 },
+                "HorizontalBounds": { 
+                    "minCol": -10, 
+                    "maxCol": cols + 10,
+                    "onMinActions": [{'name': 'removeActor', 'params': 'self'}],
+                    "onMaxActions": [{'name': 'removeActor', 'params': 'self'}] 
+                },
+                "AnsiRender": { "sprite": [
+                    [c.BOLD + c.FG_COLOR_RED + "(", "m", "m", "m", ")" + c.RESET]
+                ]}
             }
         },
         "shield": {
@@ -239,7 +255,8 @@ gameConfig = {
                 # alienArmy"
                 {"tag": "alien-army", "components": {
                     "AlienArmyController": {
-                        "actor": "alien",
+                        "alienTag": "alien",
+                        "ufoTag": "ufo",
                         "vel": 1.0 / 60.0,
                         "ivel": 1.0 / 80.0,
                         "rows": 4,

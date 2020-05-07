@@ -1,4 +1,5 @@
 import copy
+import random
 from .actorComponent import ActorComponent
 
 class AlienArmyControllerComponent(ActorComponent):
@@ -9,7 +10,8 @@ class AlienArmyControllerComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
-        self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('actor')))
+        self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienTag')))
+        self.ufoCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('ufoTag')))
         self.rows = cfg.get("aliensRows", 4)
         self.perRow = cfg.get("aliensPerRow", 8)
         self.step = cfg.get("aliensStep", 4)
@@ -19,14 +21,17 @@ class AlienArmyControllerComponent(ActorComponent):
         self.initialIVel = cfg.get("ivel", 1 / 80)
 
         self.aliens = []
+        self.ufoId = -1
         self.state = "UNINITIALIZED"
         self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
         self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
         self.game.eventManager.bind(on_collision=self.handleCollision)
+        self.game.eventManager.bind(on_actor_removed=self.handleActorRemoved)
 
     def createAliens(self):
         self.vel = self.initialVel
         self.ivel = self.initialIVel
+        self.alienCfg['components']['AlienController']['fireProb'] += 0.001
         self.aliens = []
         for row in range(self.initialRow, self.initialRow + self.rows):
             for index in range(self.perRow):
@@ -43,8 +48,23 @@ class AlienArmyControllerComponent(ActorComponent):
                 )
                 self.aliens.append(alien.id)
     
+    def handleActorRemoved(self,*args, **kwargs):
+        if self.ufoId == -1:
+            return
+
+        data = kwargs.get('data')
+        if self.ufoId == data:
+            self.ufoId = -1
+
     def handleCollision(self, *args, **kwargs):
         data = kwargs.get('data')
+        if data[1] == self.ufoId:
+            self.game.addActions(
+                self.actorId,
+                [{'name': 'removeActor', 'params': data[1] }]
+            )
+            return
+
         if data[1] in self.aliens:
             self.game.addActions(
                 self.actorId,
@@ -84,9 +104,26 @@ class AlienArmyControllerComponent(ActorComponent):
             self.state = 'READY'
 
         if self.state == 'READY':
-            alien = self.getActor(self.aliens[0])
-            if int(alien.pos[1]) != int(alien.oldPos[1]):
-                for alienId in self.aliens:
-                    alien = self.getActor(alienId)
-                    renderComponent = alien.getComponent('Render')
-                    renderComponent.frame = (renderComponent.frame + 1) % len(renderComponent.sprite)
+            self._createUfo()
+            self._updateAliensFrame()
+
+    def _createUfo(self):
+        ufo = self.getActor(self.ufoId)
+        if ufo:
+            return
+
+        if random.random() < 0.01:
+            ufo = self.game.createActor(self.ufoCfg)
+            self.ufoId = ufo.id
+            self.game.addActions(
+                self.actorId,
+                [{'name': 'addActor', 'params': ufo }]
+            )
+
+    def _updateAliensFrame(self):
+        alien = self.getActor(self.aliens[0])
+        if int(alien.pos[1]) != int(alien.oldPos[1]):
+            for alienId in self.aliens:
+                alien = self.getActor(alienId)
+                renderComponent = alien.getComponent('Render')
+                renderComponent.frame = (renderComponent.frame + 1) % len(renderComponent.sprite)
