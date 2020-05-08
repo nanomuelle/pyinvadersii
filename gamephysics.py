@@ -1,5 +1,6 @@
 from gamephysicsbase import GamePhysicsBase
-from simplephysicsengine import World
+from simplephysicsengine.world import World
+from simplephysicsengine.body import Body
 
 class GamePhysics(GamePhysicsBase):
     def __init__(self, game):
@@ -10,18 +11,23 @@ class GamePhysics(GamePhysicsBase):
         pass
 
     def update(self, deltaSeconds):
-        pass
+        self.world.update(deltaSeconds)
 
     def syncVisibleScene(self):
-        pass
+        actors = self.game.actors
+        for actorId, body in self.world.movedBodies.items():
+            actors[actorId].setPos(body.pos[1], body.pos[0])
 
     # // Initialization of Physics Objects virtual
     # // void VAddSphere(float radius, WeakActorPtr actor, const Mat4x4& initialTransform, const std::string& densityStr, const std::string& physicsMaterial)=0;
     def addBox(self, size, actorId, pos):
-        pass
+        body = Body()
+        body.actorId = actorId
+        body.addBoxCollisionShape(size, (0, 0))
+        self.world.addBody(body)
 
     def removeActor(self, actorId):
-        pass
+        self.world.removeBodyByActorId(actorId)
 
     # // Debugging
     def renderDiagnostics(self):
@@ -32,4 +38,7 @@ class GamePhysics(GamePhysicsBase):
     # applyForce(const Vec3 &dir, float newtons, ActorId aid)=0;
     # applyTorque(const Vec3 &dir, float newtons, ActorId aid)=0;
     def kinematicMove(self, pos, actorId):
-        pass
+        actor = self.game.actors.get(actorId, False)
+        body = self.world.bodies.get(actorId, False)
+        if actor and body:
+            body.setPos((actor.col, actor.row))

@@ -13,7 +13,6 @@ class GamePhysicsBase:
         pass
 
     # // Initialization of Physics Objects virtual
-    # // void VAddSphere(float radius, WeakActorPtr actor, const Mat4x4& initialTransform, const std::string& densityStr, const std::string& physicsMaterial)=0;
     def addBox(self, size, actorId, pos):
         pass
 
