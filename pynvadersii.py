@@ -209,12 +209,12 @@ class Invaders:
         if not sameRow:
             return False
 
-        actor1W = actor1.getComponent('Physics').w        
+        actor1W = actor1.getComponent('Physics').size[0]        
         cond1 = actor2.col >= actor1.col and actor2.col <= actor1.col + actor1W
         if cond1:
             return True
         
-        actor2W = actor1.getComponent('Physics').w
+        actor2W = actor1.getComponent('Physics').size[0]
         return actor1.col >= actor2.col and actor1.col <= actor2.col + actor2W
 
     def checkCollisions(self, deltaTime):

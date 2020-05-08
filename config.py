@@ -17,7 +17,7 @@ gameConfig = {
         "gun-bullet": {
             "tag": "gun-bullet",
             "components": {
-                "Physics": {"w": 1, "h": 1, "rowVel": -20},
+                "Physics": {"size": (1.0, 1.0), "vel": (0, -20) },
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows - 2,
@@ -36,7 +36,7 @@ gameConfig = {
         "alien-bullet": {
             "tag": "alien-bullet",
             "components": {
-                "Physics": {"w": 1, "h": 1, "rowVel": 10},
+                "Physics": { "size": (1.0, 1.0), "vel": (0, 10) },
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows,
@@ -55,7 +55,7 @@ gameConfig = {
             "row": float(rows - 1), "col": float(cols / 2),
             "components": {
                 "ControlledByUser": {"moveLeftInputIndex": 1, "moveRightInputIndex": 2},
-                "Physics": {"w": 3, "h": 1},
+                "Physics": { "size": (3.0, 1.0) },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "FireController": {
                     "ammoCapacity": 1,
@@ -73,7 +73,7 @@ gameConfig = {
         "alien": {
             "tag": "alien",
             "components": {
-                "Physics": {"w": 3, "h": 1},
+                "Physics": {"size": (3.0, 1.0) },
                 "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
                 "AlienController": {
                     "fireProb": 0.0005
@@ -98,7 +98,7 @@ gameConfig = {
             "tag": "ufo",
             "row": 1.0, "col": float(cols + 4),
             "components": {
-                "Physics": {"w": 4, "h": 1, "colVel": -0.2 },
+                "Physics": {"size": (4.0, 1.0), "vel": (-20, 0) },
                 "HorizontalBounds": { 
                     "minCol": -10, 
                     "maxCol": cols + 10,
@@ -115,7 +115,7 @@ gameConfig = {
             "row": rows - 4,
             "col": 0,
             "components": {
-                "Physics": {"w": 1, "h": 1},
+                "Physics": {"size": (1.0, 1.0) },
                 "ShieldController": {
                     "maxDamage": 4,
                     "damage": 0,
@@ -149,13 +149,7 @@ gameConfig = {
                     "value": '000000'
                 }
             }
-        },
-        "vscroll-text": {
-            "tag": "vscroll-text",
-            "components": {
-                "Physics": {"rowVel": -0.1}
-            }
-        },
+        }
     },
     "scenes": [
         {
@@ -163,48 +157,47 @@ gameConfig = {
             "initialActors": [
                 # title
                 {"row": 1, "col": 70, "components": {
-                    "Physics": {"colVel": -40},
-                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                    "Physics": { "vel": (-40, 0), "minX": 11 },
                     "AnsiRender": {"sprite": [r" _, __,  _,  _, __,"]}
                 }},
                 {"row": 2, "col": 80, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r"(_  |_) / \ / ` |_"]}
                 }},
                 {"row": 3, "col": 90, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r", ) |   |~| \ , | "]}
                 }},
                 {"row": 4, "col": 100, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r" ~  ~   ~ ~  ~  ~~~"]}
                 }},
 
                 {"row": 5, "col": 110, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"_ _, _ _,_  _, __, __, __,  _,"]}
                 }},
                 {"row": 6, "col": 120, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"| |\ | | / / \ | \ |_  |_) (_"]}
                 }},
                 {"row": 7, "col": 130, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"| | \| |/  |~| |_/ |   | \ , )"]}
                 }},
                 {"row": 8, "col": 140, "components": {
-                    "Physics": {"colVel": -40},
+                    "Physics": { "vel": (-40, 0) },
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
                 }},
                 {"row": 100, "col": 9, "components": {
-                    "Physics": {"rowVel": -30},
+                    "Physics": { "vel": (0, -30) },
                     "VerticalBounds": {"minRow": 12, "maxRow": 500},
                     "AnsiRender": {
                         "sprite": [
@@ -280,67 +273,67 @@ gameConfig = {
             "description": "game over",
             "initialActors": [
                 {"row": rows + 1, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 2, "maxRow": 100},
                     "AnsiRender": {"sprite": [" ██████╗  █████╗ ███╗   ███╗███████╗"]}}},
                 {"row": rows + 2, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 3, "maxRow": 100},
                     "TextRender": {"text": "██╔════╝ ██╔══██╗████╗ ████║██╔════╝"
                                    }}},
                 {"row": rows + 3, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 4, "maxRow": 100},
                     "TextRender": {"text": "██║  ███╗███████║██╔████╔██║█████╗  "
                                    }}},
                 {"row": rows + 4, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 5, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  "
                                    }}},
                 {"row": rows + 5, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 6, "maxRow": 100},
                     "TextRender": {"text": "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗"
                                    }}},
                 {"row": rows + 6, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 7, "maxRow": 100},
                     "TextRender": {"text": " ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝"
                                    }}},
 
                 {"row": rows + 12, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 8, "maxRow": 100},
                     "TextRender": {"text": " ██████╗ ██╗   ██╗███████╗██████╗ "}}},
                 {"row": rows + 13, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 9, "maxRow": 100},
                     "TextRender": {"text": "██╔═══██╗██║   ██║██╔════╝██╔══██╗"
                                    }}},
                 {"row": rows + 14, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 10, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║██║   ██║█████╗  ██████╔╝"
                                    }}},
                 {"row": rows + 15, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 11, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗"
                                    }}},
                 {"row": rows + 16, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 12, "maxRow": 100},
                     "TextRender": {"text": "╚██████╔╝ ╚████╔╝ ███████╗██║  ██║"
                                    }}},
                 {"row": rows + 17, "col": 2, "components": {
-                    "Physics": {"rowVel": -0.1},
+                    "Physics": { "vel": (0, -10) },
                     "VerticalBounds": {"minRow": 13, "maxRow": 100},
                     "TextRender": {"text": " ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝"
                                    }}},
 
                 {"row": 15, "col": 500, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": { "vel": (-20, 0) },
                     "HorizontalBounds": {"minCol": 12, "maxCol": 500},
                     "AnsiRender": {
                         "sprite": [

@@ -22,9 +22,7 @@ class GamePhysics(GamePhysicsBase):
         physicsComponent = actor.getComponent('Physics')
         if physicsComponent:
             pos = (actor.col, actor.row)
-            vel = (physicsComponent.colVel, physicsComponent.rowVel)
-            size = (physicsComponent.w, physicsComponent.h)
-            self.addBox(size, actorId, pos, vel)
+            self.addBox(physicsComponent.size, actorId, pos, physicsComponent.vel)
 
     def update(self, deltaSeconds):
         self.world.update(deltaSeconds)

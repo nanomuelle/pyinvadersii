@@ -40,7 +40,7 @@ class AlienArmyControllerComponent(ActorComponent):
                     "row": row,
                     "col": self.initialCol + (index * self.step)
                 }
-                alienCfg['components']['Physics']['colVel'] = self.vel
+                alienCfg['components']['Physics']['vel'] = (self.vel, 0.0)
                 alien = self.game.createActor(alienCfg)
                 self.game.addActions(
                     self.actorId,
@@ -84,12 +84,10 @@ class AlienArmyControllerComponent(ActorComponent):
             self.state = 'MOVE DOWN ARMY'
     
     def adjustAlienVelocity(self):
+        print("adjustAlienVelocity")
         for alienId in self.aliens:
             alien = self.getActor(alienId)
             if alien:
-                # alien.setPos(alien.row + 1, alien.col)
-                # physicsComponent = alien.getComponent('Physics')
-                # physicsComponent.colVel = self.vel
                 self.game.physics.kinematicMove((alien.col, alien.row + 1), alienId)
                 self.game.physics.applyVel((self.vel, 0), alienId)
 
