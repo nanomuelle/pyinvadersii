@@ -17,7 +17,7 @@ gameConfig = {
         "gun-bullet": {
             "tag": "gun-bullet",
             "components": {
-                "Physics": {"w": 1, "h": 1, "rowVel": -0.5},
+                "Physics": {"w": 1, "h": 1, "rowVel": -20},
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows - 2,
@@ -36,7 +36,7 @@ gameConfig = {
         "alien-bullet": {
             "tag": "alien-bullet",
             "components": {
-                "Physics": {"w": 1, "h": 1, "rowVel": 0.2},
+                "Physics": {"w": 1, "h": 1, "rowVel": 10},
                 "VerticalBounds": {
                     "minRow": 0,
                     "maxRow": rows,
@@ -106,7 +106,7 @@ gameConfig = {
                     "onMaxActions": [{'name': 'removeActor', 'params': 'self'}] 
                 },
                 "AnsiRender": { "sprite": [
-                    [c.BOLD + c.FG_COLOR_RED + "(", "═", c.BLINK + "═", "═", ")" + c.RESET]
+                    [c.BOLD + c.FG_COLOR_RED + "(", "═", "═", "═", ")" + c.RESET]
                 ]}
             }
         },
@@ -163,48 +163,48 @@ gameConfig = {
             "initialActors": [
                 # title
                 {"row": 1, "col": 70, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r" _, __,  _,  _, __,"]}
                 }},
                 {"row": 2, "col": 80, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r"(_  |_) / \ / ` |_"]}
                 }},
                 {"row": 3, "col": 90, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r", ) |   |~| \ , | "]}
                 }},
                 {"row": 4, "col": 100, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 11, "maxCol": 100},
                     "AnsiRender": {"sprite": [r" ~  ~   ~ ~  ~  ~~~"]}
                 }},
 
                 {"row": 5, "col": 110, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"_ _, _ _,_  _, __, __, __,  _,"]}
                 }},
                 {"row": 6, "col": 120, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"| |\ | | / / \ | \ |_  |_) (_"]}
                 }},
                 {"row": 7, "col": 130, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"| | \| |/  |~| |_/ |   | \ , )"]}
                 }},
                 {"row": 8, "col": 140, "components": {
-                    "Physics": {"colVel": -2},
+                    "Physics": {"colVel": -40},
                     "HorizontalBounds": {"minCol": 5, "maxCol": 140},
                     "AnsiRender": {"sprite": [r"~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
                 }},
                 {"row": 100, "col": 9, "components": {
-                    "Physics": {"rowVel": -1.5},
+                    "Physics": {"rowVel": -30},
                     "VerticalBounds": {"minRow": 12, "maxRow": 500},
                     "AnsiRender": {
                         "sprite": [
@@ -257,8 +257,8 @@ gameConfig = {
                     "AlienArmyController": {
                         "alienTag": "alien",
                         "ufoTag": "ufo",
-                        "vel": 1.0 / 60.0,
-                        "ivel": 1.0 / 80.0,
+                        "vel": 1.0,
+                        "ivel": 0.2,
                         "rows": 4,
                         "perRow": 8,
                         "step": 4,

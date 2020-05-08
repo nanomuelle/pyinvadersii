@@ -8,7 +8,23 @@ class GamePhysics(GamePhysicsBase):
 
     def init(self):
         self.world = World()
+        self.game.eventManager.bind(on_actor_added=self._handleActorAdded)
+        self.game.eventManager.bind(on_actor_removed=self._handleActorRemoved)
         pass
+
+    def _handleActorRemoved(self, *args, **kwargs):
+        actorId = kwargs.get('data')
+        self.removeActor(actorId)
+
+    def _handleActorAdded(self, *args, **kwargs):
+        actorId = kwargs.get('data')
+        actor = self.game.actors[actorId]
+        physicsComponent = actor.getComponent('Physics')
+        if physicsComponent:
+            pos = (actor.col, actor.row)
+            vel = (physicsComponent.colVel, physicsComponent.rowVel)
+            size = (physicsComponent.w, physicsComponent.h)
+            self.addBox(size, actorId, pos, vel)
 
     def update(self, deltaSeconds):
         self.world.update(deltaSeconds)
@@ -20,9 +36,11 @@ class GamePhysics(GamePhysicsBase):
 
     # // Initialization of Physics Objects virtual
     # // void VAddSphere(float radius, WeakActorPtr actor, const Mat4x4& initialTransform, const std::string& densityStr, const std::string& physicsMaterial)=0;
-    def addBox(self, size, actorId, pos):
+    def addBox(self, size, actorId, pos, vel):
         body = Body()
         body.actorId = actorId
+        body.setPos(pos)
+        body.setVel(vel)
         body.addBoxCollisionShape(size, (0, 0))
         self.world.addBody(body)
 
@@ -38,7 +56,11 @@ class GamePhysics(GamePhysicsBase):
     # applyForce(const Vec3 &dir, float newtons, ActorId aid)=0;
     # applyTorque(const Vec3 &dir, float newtons, ActorId aid)=0;
     def kinematicMove(self, pos, actorId):
-        actor = self.game.actors.get(actorId, False)
         body = self.world.bodies.get(actorId, False)
-        if actor and body:
-            body.setPos((actor.col, actor.row))
+        if body:
+            body.setPos(pos)
+
+    def applyVel(self, vel, actorId):
+        body = self.world.getBodyByActorId(actorId)
+        if body:
+            body.setVel(vel)

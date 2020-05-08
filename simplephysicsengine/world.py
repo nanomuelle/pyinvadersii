@@ -15,15 +15,20 @@ class World:
     def _move(self, deltaTime):
         def moveBody(body):
             if body.vel != (0, 0):
-                body.setPos(map(lambda p, v: p + v *
-                                deltaTime, body.pos, body.vel))
+                body.setPos(tuple(map(lambda p, v: p + v *
+                                deltaTime, body.pos, body.vel)))
             return body
         return moveBody
 
     def update(self, deltaTime):
-        moveBody = self._move(deltaTime)
-        self.movedBodies = {actorId: body for (actorId, body) in
-                            map(moveBody, self.bodies) if body.lastPos != body.pos}
+        moveBodyDeltatime = self._move(deltaTime)
+        self.movedBodies = {}
+        for actorId, body in self.bodies.items():
+            moveBodyDeltatime(body)
+            if (body.oldPos != body.pos):
+                self.movedBodies[actorId] = body
+        # self.movedBodies = {actorId: body for (actorId, body) in
+        #                     map(moveBodyDeltatime, self.bodies) if body.lastPos != body.pos}
 
         # self.movedBodies = reduce(
         #     lambda movedBodies, body: movedBodies if not self._move(
@@ -35,4 +40,8 @@ class World:
         self.bodies[body.actorId] = body
 
     def removeBodyByActorId(self, actorId):
-        del self.bodies[actorId]
+        if self.getBodyByActorId(actorId):
+            del self.bodies[actorId]
+
+    def getBodyByActorId(self, actorId):
+        return self.bodies.get(actorId, False)

@@ -8,6 +8,7 @@ from screen import Screen
 from events import EventManager
 from config import gameConfig
 from userinput import UserInput
+from gamephysics import GamePhysics
 
 class Invaders:
     def __init__(self, cfg):
@@ -41,6 +42,9 @@ class Invaders:
         self.actorPatterns = copy.deepcopy(cfg.get("actors"))
         
         self.screen = Screen(self.rows, self.cols, self.bgcolor)
+        self.physics = GamePhysics(self)
+        self.physics.init()
+
         self.loadScene()
 
     def addActions(self, actorId, actions):
@@ -66,6 +70,10 @@ class Invaders:
             self.eventManager.enqueue({ 'name': 'on_actor_removed', 'data': params })
 
     def nextSceneAction(self, deltaTime, params):
+        actorIds = list(self.actors.keys())[:]
+        for actorId in actorIds:
+            self.removeActorAction(0, actorId)
+
         self.sceneIndex += 1
         self.loadScene()
 
@@ -87,7 +95,8 @@ class Invaders:
             actorCfg = {**actorTemplate, **sceneActorCfg}
             actor = Actor()
             actor.init(self, actorCfg)
-            self.actors[actor.id] = actor
+            self.addActorAction(0, actor)
+            # self.actors[actor.id] = actor
 
     def findActorByTag(self, tag):
         for actor in self.actors.values():
@@ -258,6 +267,7 @@ class Invaders:
 
     def start(self):
         print()
+
         self.lastTime = time.time()
         exitGame = False
         while not exitGame:
@@ -272,7 +282,12 @@ class Invaders:
                 # exitGame = True
 
             self.userInput = self.scanUserInput()
+            
+            self.physics.update(deltaTime)
+            self.physics.syncVisibleScene()
+
             self.gameLogic(deltaTime)
+
             self.processActions(deltaTime)
             self.checkCollisions(deltaTime)
             self.eventManager.dispatchEvents(deltaTime)

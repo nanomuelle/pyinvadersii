@@ -1,5 +1,5 @@
-from collisionshape import CollisionShape
-from boxshape import BoxShape
+from .collisionshape import CollisionShape
+from .boxshape import BoxShape
 
 class Body:
     def __init__(self):

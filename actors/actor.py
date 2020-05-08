@@ -88,8 +88,9 @@ class Actor:
             self.components[component.__class__.componentType] = component
 
     def getComponent(self, componentType):
-        component = self.components.get(componentType, False)
-        if not component:
-            print("Error: {} component not found in actor {}".format(componentType, self))
-            sys.exit()
-        return component
+        return self.components.get(componentType, False)
+        # component = self.components.get(componentType, False)
+        # if not component:
+        #     print("Error: {} component not found in actor {}".format(componentType, self))
+        #     sys.exit()
+        # return component

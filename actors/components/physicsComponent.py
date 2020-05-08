@@ -13,9 +13,9 @@ class PhysicsComponent(ActorComponent):
         self.rowVel = cfg.get('rowVel', 0.0)
         self.colVel = cfg.get('colVel', 0.0)
 
-    def update(self, deltaTime):
-        actor = self.getActor()
-        actor.setPos(
-            actor.row + self.rowVel, 
-            actor.col + self.colVel
-        )
+    # def update(self, deltaTime):
+    #     actor = self.getActor()
+    #     actor.setPos(
+    #         actor.row + self.rowVel, 
+    #         actor.col + self.colVel
+    #     )

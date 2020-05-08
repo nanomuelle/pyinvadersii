@@ -87,9 +87,11 @@ class AlienArmyControllerComponent(ActorComponent):
         for alienId in self.aliens:
             alien = self.getActor(alienId)
             if alien:
-                alien.setPos(alien.row + 1, alien.col)
-                physicsComponent = alien.getComponent('Physics')
-                physicsComponent.colVel = self.vel
+                # alien.setPos(alien.row + 1, alien.col)
+                # physicsComponent = alien.getComponent('Physics')
+                # physicsComponent.colVel = self.vel
+                self.game.physics.kinematicMove((alien.col, alien.row + 1), alienId)
+                self.game.physics.applyVel((self.vel, 0), alienId)
 
     def update(self, deltaTime):
         if self.state == 'UNINITIALIZED':
@@ -98,10 +100,11 @@ class AlienArmyControllerComponent(ActorComponent):
             return
 
         if self.state == 'MOVE DOWN ARMY':
-            self.vel = self.vel - self.ivel if self.vel < 0 else self.vel + self.ivel
+            self.state = 'READY'
+            # self.vel = self.vel - self.ivel if self.vel < 0 else self.vel + self.ivel
             self.vel = -self.vel
             self.adjustAlienVelocity()
-            self.state = 'READY'
+            
 
         if self.state == 'READY':
             self._createUfo()
