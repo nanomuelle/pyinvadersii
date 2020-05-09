@@ -15,8 +15,9 @@ class World:
     def _move(self, deltaTime):
         def moveBody(body):
             if body.vel != (0, 0):
-                body.setPos(tuple(map(lambda p, v: p + v *
-                                deltaTime, body.pos, body.vel)))
+                pos = map(lambda p, v, minP, maxP: max(minP, min(maxP, p + v * deltaTime)),
+                          body.pos, body.vel, body.minBounds, body.maxBounds)
+                body.setPos(tuple(pos))
             return body
         return moveBody
 

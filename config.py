@@ -3,7 +3,7 @@ import constants as c
 rows = 20
 cols = 40
 gameConfig = {
-    "frameDelay": 1 / 30,
+    "frameDelay": 1 / 60,
     "rows": rows,
     "cols": cols,
     "bgcolor": c.BG_COLOR_BLACK,
@@ -17,15 +17,13 @@ gameConfig = {
         "gun-bullet": {
             "tag": "gun-bullet",
             "components": {
-                "Physics": {"size": (1.0, 1.0), "vel": (0, -20) },
-                "VerticalBounds": {
-                    "minRow": 0,
-                    "maxRow": rows - 2,
-                    "onMinActions": [
-                        {'name': 'removeActor', 'params': 'self'},
-                    ]
+                "Transform": {},
+                "Physics": {
+                    "size": (1.0, 1.0),
+                    "vel": (0, -20),
+                    "minY": 0
                 },
-                "AutodestroyCollision": {},
+                "BulletController": {},
                 "AnsiRender": {
                     "sprite": [
                         [c.BOLD + c.FG_COLOR_YELLOW + "|" + c.RESET]
@@ -36,15 +34,13 @@ gameConfig = {
         "alien-bullet": {
             "tag": "alien-bullet",
             "components": {
-                "Physics": { "size": (1.0, 1.0), "vel": (0, 10) },
-                "VerticalBounds": {
-                    "minRow": 0,
-                    "maxRow": rows,
-                    "onMaxActions": [
-                        {'name': 'removeActor', 'params': 'self'},
-                    ]
+                "Transform": {},
+                "Physics": {
+                    "size": (1.0, 1.0),
+                    "vel": (0, 10),
+                    "maxY": rows
                 },
-                "AutodestroyCollision": {},
+                "BulletController": {},
                 "AnsiRender": {"sprite": [
                     [c.BOLD + c.FG_COLOR_CYAN + "╎" + c.RESET]
                 ]}
@@ -52,11 +48,15 @@ gameConfig = {
         },
         "gun": {
             "tag": "gun",
-            "row": float(rows - 1), "col": float(cols / 2),
             "components": {
-                "ControlledByUser": {"moveLeftInputIndex": 1, "moveRightInputIndex": 2},
-                "Physics": { "size": (3.0, 1.0) },
-                "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
+                "Transform": {"pos": (cols / 2, rows - 1)},
+                "ControlledByUser": { "vel": 20.0 },
+                "Physics": {
+                    "size": (3.0, 1.0),
+                    "vel": (0.0, 0.0),
+                    "minX": 1,
+                    "maxX": cols - 4
+                },
                 "FireController": {
                     "ammoCapacity": 1,
                     "ammo": 1,
@@ -73,11 +73,13 @@ gameConfig = {
         "alien": {
             "tag": "alien",
             "components": {
-                "Physics": {"size": (3.0, 1.0) },
-                "HorizontalBounds": {"minCol": 1, "maxCol": cols - 4},
-                "AlienController": {
-                    "fireProb": 0.0005
+                "Transform": {},
+                "Physics": {
+                    "size": (3.0, 1.0),
+                    "minX": 1,
+                    "maxX": cols - 4
                 },
+                "AlienController": {"fireProb": 0.0005},
                 "FireController": {
                     "ammoCapacity": 1,
                     "ammo": 1,
@@ -85,12 +87,13 @@ gameConfig = {
                     "colOffset": 1,
                     "bullet": "alien-bullet",
                 },
-                "AlienRender": {
+                "AnsiRender": {
                     "sprite": [
                         [c.FG_COLOR_CYAN + "╒", "H", "╕" + c.RESET],
                         [c.FG_COLOR_CYAN + "╘", "H", "╛" + c.RESET]
                     ],
-                    "frame": 0
+                    "frame": 0,
+                    "animationTime": 0.5
                 }
             }
         },
@@ -98,15 +101,17 @@ gameConfig = {
             "tag": "ufo",
             "row": 1.0, "col": float(cols + 4),
             "components": {
-                "Physics": {"size": (4.0, 1.0), "vel": (-20, 0) },
-                "HorizontalBounds": { 
-                    "minCol": -10, 
-                    "maxCol": cols + 10,
-                    "onMinActions": [{'name': 'removeActor', 'params': 'self'}],
-                    "onMaxActions": [{'name': 'removeActor', 'params': 'self'}] 
+                "Transform": {"pos": (cols + 4, 1)},
+                "Physics": {
+                    "size": (4.0, 1.0),
+                    "vel": (-20.0, 0.0),
+                    "minX": -10.0,
+                    "maxX": cols + 10.0
                 },
-                "AnsiRender": { "sprite": [
-                    [c.BOLD + c.FG_COLOR_RED + "(", "═", "═", "═", ")" + c.RESET]
+                "UfoController": {},
+                "AnsiRender": {"sprite": [
+                    [c.BOLD + c.FG_COLOR_RED +
+                        "(", "═", "═", "═", ")" + c.RESET]
                 ]}
             }
         },
@@ -115,7 +120,8 @@ gameConfig = {
             "row": rows - 4,
             "col": 0,
             "components": {
-                "Physics": {"size": (1.0, 1.0) },
+                "Transform": {"pos": (0.0, rows - 4)},
+                "Physics": {"size": (1.0, 1.0)},
                 "ShieldController": {
                     "maxDamage": 4,
                     "damage": 0,
@@ -141,9 +147,8 @@ gameConfig = {
             "row": 0,
             "col": cols - 13,
             "components": {
-                "ScoreController": {
-                    "pointsPerAlien": 10,
-                },
+                "Transform": {"pos": (cols - 13, 0.0)},
+                "ScoreController": {"pointsPerAlien": 10},
                 "TextRender": {
                     "text": "SCORE:{}",
                     "value": '000000'
@@ -156,100 +161,102 @@ gameConfig = {
             "description": "MAIN MENU",
             "initialActors": [
                 # title
-                {"row": 1, "col": 70, "components": {
-                    "Physics": { "vel": (-40, 0), "minX": 11 },
+                {"components": {
+                    "Transform": {"pos": (70.0, 1.0)},
+                    "Physics": {"vel": (-40.0, 0.0), "minX": 11.0},
                     "AnsiRender": {"sprite": [r" _, __,  _,  _, __,"]}
                 }},
-                {"row": 2, "col": 80, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                {"components": {
+                    "Transform": {"pos": (80, 2)},
+                    "Physics": {"vel": (-40, 0), "minX": 11},
                     "AnsiRender": {"sprite": [r"(_  |_) / \ / ` |_"]}
                 }},
-                {"row": 3, "col": 90, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                {"components": {
+                    "Transform": {"pos": (90, 3)},
+                    "Physics": {"vel": (-40, 0), "minX": 11},
                     "AnsiRender": {"sprite": [r", ) |   |~| \ , | "]}
                 }},
-                {"row": 4, "col": 100, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 11, "maxCol": 100},
+                {"components": {
+                    "Transform": {"pos": (100, 4)},
+                    "Physics": {"vel": (-40, 0), "minX": 11},
                     "AnsiRender": {"sprite": [r" ~  ~   ~ ~  ~  ~~~"]}
                 }},
 
-                {"row": 5, "col": 110, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                {"components": {
+                    "Transform": {"pos": (110, 5)},
+                    "Physics": {"vel": (-40, 0), "minX": 5},
                     "AnsiRender": {"sprite": [r"_ _, _ _,_  _, __, __, __,  _,"]}
                 }},
-                {"row": 6, "col": 120, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                {"components": {
+                    "Transform": {"pos": (120, 6)},
+                    "Physics": {"vel": (-40, 0), "minX": 5},
                     "AnsiRender": {"sprite": [r"| |\ | | / / \ | \ |_  |_) (_"]}
                 }},
-                {"row": 7, "col": 130, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                {"components": {
+                    "Transform": {"pos": (130, 7)},
+                    "Physics": {"vel": (-40, 0), "minX": 5},
                     "AnsiRender": {"sprite": [r"| | \| |/  |~| |_/ |   | \ , )"]}
                 }},
-                {"row": 8, "col": 140, "components": {
-                    "Physics": { "vel": (-40, 0) },
-                    "HorizontalBounds": {"minCol": 5, "maxCol": 140},
+                {"components": {
+                    "Transform": {"pos": (140, 8)},
+                    "Physics": {"vel": (-40, 0), "minX": 5},
                     "AnsiRender": {"sprite": [r"~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
                 }},
-                {"row": 100, "col": 9, "components": {
-                    "Physics": { "vel": (0, -30) },
-                    "VerticalBounds": {"minRow": 12, "maxRow": 500},
+                {"components": {
+                    "Transform": {"pos": (9, 100)},
+                    "Physics": {"vel": (0, -30), "minY": 12},
                     "AnsiRender": {
                         "sprite": [
                             [c.BOLD + c.BG_COLOR_MAGENTA + "P", "R", "E", "S", "S", " ",
-                             "A", "N", "Y", " ", "K", "E", "Y", " ", "T", "O", " ",
+                             "S", "P", "A", "C", "E", " ", "T", "O", " ",
                              "S", "T", "A", "R", "T" + c.RESET]
                         ]
                     }}
-                },
-                {
-                    "components": {
-                        "IntroScene" : {}
-                    }
-                }
+                 },
+
+                # IntroScene
+                {"components": {
+                    "IntroScene": {}
+                }}
             ]
         },
         {
             "description": "GAMEPLAY",
             "initialActors": [
                 # level name
-                {"row": 0, "col": 1, "components": {
+                {"components": {
+                    "Transform": {"pos": (1.0, 0.0)},
                     "TextRender": {"text": "SPACE INVADERS"}
                 }},
                 # score
                 {"template": "score"},
                 # shields
-                {"template": "shield", "col": 6},
-                {"template": "shield", "col": 7},
-                {"template": "shield", "col": 8},
-                {"template": "shield", "col": 9},
+                {"template": "shield", "components": {"Transform": {"pos": (10, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (7.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (8.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (9.0, rows - 4)}}},
 
-                {"template": "shield", "col": 14},
-                {"template": "shield", "col": 15},
-                {"template": "shield", "col": 16},
-                {"template": "shield", "col": 17},
+                {"template": "shield", "components": {"Transform": {"pos": (14.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (15.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (16.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (17.0, rows - 4)}}},
 
-                {"template": "shield", "col": 22},
-                {"template": "shield", "col": 23},
-                {"template": "shield", "col": 24},
-                {"template": "shield", "col": 25},
+                {"template": "shield", "components": {"Transform": {"pos": (22.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (23.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (24.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (25.0, rows - 4)}}},
 
-                {"template": "shield", "col": 30},
-                {"template": "shield", "col": 31},
-                {"template": "shield", "col": 32},
-                {"template": "shield", "col": 33},
+                {"template": "shield", "components": {"Transform": {"pos": (30.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (31.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (32.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (33.0, rows - 4)}}},
                 # gun
                 {"template": "gun"},
                 # alienArmy"
                 {"tag": "alien-army", "components": {
                     "AlienArmyController": {
                         "alienTag": "alien",
-                        "ufoTag": "ufo",
+                        # "ufoTag": "ufo",
                         "vel": 1.0,
                         "ivel": 0.2,
                         "rows": 4,
@@ -259,81 +266,81 @@ gameConfig = {
                         "initialCol": 5
                     }
                 }},
-                {
-                    "components": {
-                        "ClasicScene": {
-                            "lives": 3,
-                            "alienArmyTag": "alien-army" 
-                        }
+                # Scene
+                {"components": {
+                    "ClasicScene": {
+                        "lives": 3,
+                        "alienArmyTag": "alien-army"
                     }
-                }
+                }}
             ],
         },
         {
             "description": "game over",
             "initialActors": [
-                {"row": rows + 1, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                {"components": {
+                    "Transform": {"pos": (2.0, rows + 1.0)},
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 2, "maxRow": 100},
                     "AnsiRender": {"sprite": [" ██████╗  █████╗ ███╗   ███╗███████╗"]}}},
                 {"row": rows + 2, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 3, "maxRow": 100},
                     "TextRender": {"text": "██╔════╝ ██╔══██╗████╗ ████║██╔════╝"
                                    }}},
                 {"row": rows + 3, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 4, "maxRow": 100},
                     "TextRender": {"text": "██║  ███╗███████║██╔████╔██║█████╗  "
                                    }}},
                 {"row": rows + 4, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 5, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  "
                                    }}},
                 {"row": rows + 5, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 6, "maxRow": 100},
                     "TextRender": {"text": "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗"
                                    }}},
                 {"row": rows + 6, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 7, "maxRow": 100},
                     "TextRender": {"text": " ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝"
                                    }}},
 
                 {"row": rows + 12, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 8, "maxRow": 100},
                     "TextRender": {"text": " ██████╗ ██╗   ██╗███████╗██████╗ "}}},
                 {"row": rows + 13, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 9, "maxRow": 100},
                     "TextRender": {"text": "██╔═══██╗██║   ██║██╔════╝██╔══██╗"
                                    }}},
                 {"row": rows + 14, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 10, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║██║   ██║█████╗  ██████╔╝"
                                    }}},
                 {"row": rows + 15, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 11, "maxRow": 100},
                     "TextRender": {"text": "██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗"
                                    }}},
                 {"row": rows + 16, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 12, "maxRow": 100},
                     "TextRender": {"text": "╚██████╔╝ ╚████╔╝ ███████╗██║  ██║"
                                    }}},
                 {"row": rows + 17, "col": 2, "components": {
-                    "Physics": { "vel": (0, -10) },
+                    "Physics": {"vel": (0, -10)},
                     "VerticalBounds": {"minRow": 13, "maxRow": 100},
                     "TextRender": {"text": " ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝"
                                    }}},
 
                 {"row": 15, "col": 500, "components": {
-                    "Physics": { "vel": (-20, 0) },
+                    "Physics": {"vel": (-20, 0)},
                     "HorizontalBounds": {"minCol": 12, "maxCol": 500},
                     "AnsiRender": {
                         "sprite": [

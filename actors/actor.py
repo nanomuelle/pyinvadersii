@@ -2,42 +2,38 @@ import sys
 
 from .components.alienArmyControllerComponent import AlienArmyControllerComponent
 from .components.alienControllerComponent import AlienControllerComponent
-from .components.alienRenderComponent import AlienRenderComponent
 from .components.ansiRenderComponent import AnsiRenderComponent
 from .components.autodestroyCollisionComponent import AutodestroyCollisionComponent
+from .components.bulletControllerComponent import BulletControllerComponent
 from .components.clasicSceneComponent import ClasicSceneComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
 from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
-from .components.horizontalBoundsComponent import HorizontalBoundsComponent
 from .components.introSceneComponent import IntroSceneComponent
 from .components.physicsComponent import PhysicsComponent
 from .components.scoreControllerComponent import ScoreControllerComponent
 from .components.shieldControllerComponent import ShieldControllerComponent
 from .components.textRenderComponent import TextRenderComponent
-# from .components.velocityComponent import VelocityComponent
-from .components.verticalBoundsComponent import VerticalBoundsComponent
+from .components.transformComponent import TransformComponent
 
 ComponentFactory = {
     "AlienArmyController": AlienArmyControllerComponent,
     "AlienController": AlienControllerComponent,
-    "AlienRender": AlienRenderComponent,
     "AutodestroyCollision": AutodestroyCollisionComponent,
     "AnsiRender": AnsiRenderComponent,
+    "BulletController": BulletControllerComponent,
     "ClasicScene": ClasicSceneComponent,
     "ControlledByUser": ControlledByUserComponent,
     "FireController": FireControllerComponent,
     "FollowActor": FollowActorComponent,
     "GunRender": GunRenderComponent,
-    "HorizontalBounds": HorizontalBoundsComponent,
     "IntroScene": IntroSceneComponent,
     "Physics": PhysicsComponent,
     "ScoreController": ScoreControllerComponent,
     "ShieldController": ShieldControllerComponent,
     "TextRender": TextRenderComponent,
-    # "Velocity": VelocityComponent,
-    "VerticalBounds": VerticalBoundsComponent
+    "Transform": TransformComponent
 }
 
 def createActorComponent(componentName, actorId):
@@ -65,21 +61,23 @@ class Actor:
         # print("Actor.init id: {} cfg: {}".format(self.id, cfg))
         self.tag = cfg.get('tag', 'actor-{}'.format(self.id))
         self.game = game
-        self.oldPos = (-1000, -1000)
-        self.pos = (cfg.get('row', -1000), cfg.get('col', -1000))
+        # self.oldPos = (-1000, -1000)
+        # self.pos = (cfg.get('row', -1000), cfg.get('col', -1000))
         self.createComponents(cfg)
 
-    def setPos(self, row, col):
-        self.oldPos = tuple(self.pos)
-        self.pos = (row, col)
+    def setPos(self, pos):
+        self.components['Transform'].setPos(pos)
 
-    @property
-    def col(self):
-        return self.pos[1]
+    def getPos(self):
+        return self.components['Transform'].pos
 
-    @property
-    def row(self):
-        return self.pos[0]
+    # @property
+    # def col(self):
+    #     return self.pos[1]
+
+    # @property
+    # def row(self):
+    #     return self.pos[0]
 
     def createComponents(self, cfg):
         for (componentName, componentCfg) in cfg['components'].items():

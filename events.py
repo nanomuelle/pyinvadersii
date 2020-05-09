@@ -5,8 +5,13 @@ class EventManager(Dispatcher):
     _events_ = [
         'on_actor_removed', 
         'on_actor_added',
-        'on_horizontal_bounds_max_col',
-        'on_horizontal_bounds_min_col',
+        'on_actor_moved',
+        'on_physics_min_bounds_x',
+        'on_physics_max_bounds_x',
+        'on_physics_min_bounds_y',
+        'on_physics_max_bounds_y',
+        # 'on_horizontal_bounds_max_col',
+        # 'on_horizontal_bounds_min_col',
         'on_collision',
         'on_alienarmy_dead'
     ]

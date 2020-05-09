@@ -32,11 +32,10 @@ class FireControllerComponent(ActorComponent):
 
         self.ammo -= 1
         game = self.game
-        bullet = game.createActor({
-            **self.bulletCfg,
-            'row': actor.row + self.rowOffset,
-            'col': actor.col + self.colOffset
-        })
+        actorPos = actor.getPos()
+        bullet = game.createActor(self.bulletCfg)
+        bullet.setPos( (actorPos[0] + self.colOffset, actorPos[1] + self.rowOffset) )
+
         self.bulletId = bullet.id
         game.addActions(
             actor.id,

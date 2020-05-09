@@ -6,9 +6,8 @@ class GunRenderComponent(AnsiRenderComponent):
     def __init__(self, actorId):
         AnsiRenderComponent.__init__(self, actorId)
     
-    def update(self, deltTime):
-        actor = self.getActor()
-        if not actor:
-            return
-        fireController = actor.getComponent('FireController')
-        self.frame = 0 if fireController.ammo > 0 else 1
+    def update(self, deltaTime):
+        # AnsiRenderComponent.update(self, deltaTime)
+        fireController = self.getActor().getComponent('FireController')
+        if fireController:
+            self.frame = 0 if fireController.ammo > 0 else 1

@@ -8,21 +8,24 @@ class ControlledByUserComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
-        self.vel = 0.5
-        self.moveLeftInputIndex = cfg['moveLeftInputIndex']
-        self.moveRightInputIndex = cfg['moveRightInputIndex']
+        self.vel = cfg.get('vel', 5)
+        self.moveLeftInputIndex = cfg.get('moveLeftInputIndex', 1)
+        self.moveRightInputIndex = cfg.get('moveRightInputIndex', 2)
         self.fireInputIndex = cfg.get('fireInputIndex', 3)
 
     def update(self, deltaTime):
         actor = self.getActor()
-        incCol = 0
+        vel = (0.0, 0.0)
         userInput = self.game.userInput
         if userInput[self.moveLeftInputIndex]:
-            incCol -= self.vel
+            vel = (-self.vel, 0.0)
+
         if userInput[self.moveRightInputIndex]:
-            incCol += self.vel
-        if incCol != 0:
-            actor.setPos(actor.row, actor.col + incCol)
+            vel = (self.vel, 0.0)
+            
+        actor.getComponent('Physicst')
+        self.game.physics.applyVel(vel, self.actorId)
+            # actor.setPos(actor.row, actor.col + incCol)
         if userInput[self.fireInputIndex]:
             fireController = actor.getComponent('FireController')
             fireController.fire()

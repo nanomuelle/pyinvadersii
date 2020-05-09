@@ -9,6 +9,7 @@ from events import EventManager
 from config import gameConfig
 from userinput import UserInput
 from gamephysics import GamePhysics
+from utils import mergeDicts
 
 class Invaders:
     def __init__(self, cfg):
@@ -85,18 +86,14 @@ class Invaders:
         self.actors = {}
         self.actions = []
 
-        # self.aliensDirection = 1
-        # self.aliensDelayCounter = 0
         self.aliensDelay = sceneCfg.get('aliensDelay')
 
         for sceneActorCfg in sceneCfg.get('initialActors', []):
             template = sceneActorCfg.get('template', "")
             actorTemplate = copy.deepcopy(actorsCfg.get(template, {}))
-            actorCfg = {**actorTemplate, **sceneActorCfg}
-            actor = Actor()
-            actor.init(self, actorCfg)
+            actorCfg = mergeDicts(actorTemplate, sceneActorCfg)
+            actor = self.createActor(actorCfg)
             self.addActorAction(0, actor)
-            # self.actors[actor.id] = actor
 
     def findActorByTag(self, tag):
         for actor in self.actors.values():
@@ -107,87 +104,18 @@ class Invaders:
     def findActorsByTag(self, tag):
         return list(filter(lambda actorId: self.actors[actorId].tag == tag, self.actors))
 
-    # def createAliens(self, sceneCfg):
-    #     aliensRows = sceneCfg["aliensRows"]
-    #     aliensPerRow = sceneCfg['aliensPerRow']
-    #     aliensStep = sceneCfg['aliensStep']
-    #     aliensInitialRow = sceneCfg['aliensInitialRow']
-    #     aliensInitialCol = sceneCfg['aliensInitialCol']
-    #     alienCfg = sceneCfg['actors']['alien']
-    #     aliens = []
-    #     for row in range(aliensInitialRow, aliensRows + 1):
-    #         for index in range(aliensPerRow):
-    #             aliens.append(Actor({
-    #                 **alienCfg,
-    #                 **{"row": row, "col": aliensInitialCol + (index * aliensStep)}
-    #             }))
-    #     return aliens
-
-    # def moveGun(self, userInput):
-    #     if userInput[1]:
-    #         self.gun.col = max(1, self.gun.col - 1)
-
-    #     if userInput[2]:
-    #         self.gun.col = min(self.cols - 4, self.gun.col + 1)
-
-    # def moveBullet(self, userInput):
-    #     bullet = self.bullet
-    #     if bullet.fired:
-    #         bullet.row -= 1
-    #         if bullet.row < 0:
-    #             bullet.fired = False
-    #             bullet.row = self.gun.row - 1
-    #             bullet.col = self.gun.col + 1
-    #             bullet.frame = 0
-    #     else:
-    #         bullet.col = self.gun.col + 1
-    #         if userInput[3]:
-    #             bullet.fired = True
-    #             bullet.frame = 1
-
-    # def moveAliens(self):
-    #     self.aliensDelayCounter = (self.aliensDelayCounter + 1) % self.aliensDelay
-    #     if (self.aliensDelayCounter == 0):
-    #         changeDirection = False
-    #         for alien in self.aliens:
-    #             alien.frame = (alien.frame + 1) % 2
-    #             if abs(self.aliensDirection) == 2:
-    #                 alien.row += 1
-    #                 changeDirection = True
-    #             else:
-    #                 alien.col = alien.col + self.aliensDirection
-    #                 if alien.col > self.cols - 4 or alien.col < 1:
-    #                     changeDirection = True
-
-    #         if changeDirection:
-    #             if abs(self.aliensDirection) == 2:
-    #                 self.aliensDirection = self.aliensDirection // 2
-    #             else:
-    #                 self.aliensDirection = -2 * self.aliensDirection
-
-    # def drawActor(self, actor):
-    #     self.screen.drawChars(actor.row, actor.col, actor.getCurrentSprite())
-
     def render(self, deltaTime):
         self.screen.clear()
         for (_, actor) in self.actors.items():
             renderComponent = actor.components.get('Render', False)
             if (renderComponent):
+                pos = actor.getPos()
                 self.screen.drawChars(
-                    actor.row,
-                    actor.col,
+                    pos[1],
+                    pos[0],
                     renderComponent.getCurrentSprite()
                 )
         self.screen.render()
-
-    def scanUserInput(self):
-        return self.userInputSystem.scan()
-        # return (
-        #     keyboard.is_pressed(self.exitKey),
-        #     keyboard.is_pressed(self.playerLeftKey),
-        #     keyboard.is_pressed(self.playerRightKey),
-        #     keyboard.is_pressed(self.playerFireKey)
-        # )
 
     def gameLogic(self, deltaTime):
         for (_, actor) in self.actors.items():
@@ -205,17 +133,20 @@ class Invaders:
         self.actions = []
     
     def checkCollision(self, actor1, actor2):
-        sameRow = abs(actor1.row - actor2.row) < 1
+        pos1 = actor1.getPos()
+        pos2 = actor2.getPos()
+
+        sameRow = abs(pos1[1] - pos2[0]) < 1
         if not sameRow:
             return False
 
         actor1W = actor1.getComponent('Physics').size[0]        
-        cond1 = actor2.col >= actor1.col and actor2.col <= actor1.col + actor1W
+        cond1 = pos2[0] >= pos1[0] and pos2[0] <= pos1[0] + actor1W
         if cond1:
             return True
         
-        actor2W = actor1.getComponent('Physics').size[0]
-        return actor1.col >= actor2.col and actor1.col <= actor2.col + actor2W
+        actor2W = actor2.getComponent('Physics').size[0]
+        return pos1[0] >= pos2[0] and pos1[0] <= pos2[0] + actor2W
 
     def checkCollisions(self, deltaTime):
         army = self.findActorByTag('alien-army')
@@ -223,17 +154,17 @@ class Invaders:
         bullet = self.findActorByTag('gun-bullet')
         if bullet:
             armyController = army.getComponent('AlienArmyController')
-            ufo = self.actors.get(armyController.ufoId, False)
-            if ufo:
-                if self.checkCollision(bullet, ufo):
-                    self.eventManager.enqueue({
-                        'name': 'on_collision',
-                        'data': (bullet.id, ufo.id)
-                    })
+            # ufo = self.actors.get(armyController.ufoId, False)
+            # if ufo:
+            #     if self.checkCollision(bullet, ufo):
+            #         self.eventManager.enqueue({
+            #             'name': 'on_collision',
+            #             'data': (bullet.id, ufo.id)
+            #         })
             for alienId in armyController.aliens:
                 alien = self.actors.get(alienId, False)
                 if alien:
-                    if bullet.row == alien.row and bullet.col >= alien.col and bullet.col <= alien.col + 3:
+                    if self.checkCollision(bullet, alien):
                         self.eventManager.enqueue({
                             'name': 'on_collision',
                             'data': (bullet.id, alien.id)
@@ -278,10 +209,8 @@ class Invaders:
             if self.gameOver and self.sceneIndex == 0:
                 self.sceneIndex += 1
                 self.loadScene()
-                # print("GAME OVER")
-                # exitGame = True
 
-            self.userInput = self.scanUserInput()
+            self.userInput = self.userInputSystem.scan()
             
             self.physics.update(deltaTime)
             self.physics.syncVisibleScene()

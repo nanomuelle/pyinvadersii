@@ -21,25 +21,38 @@ class GamePhysics(GamePhysicsBase):
         actor = self.game.actors[actorId]
         physicsComponent = actor.getComponent('Physics')
         if physicsComponent:
-            pos = (actor.col, actor.row)
-            self.addBox(physicsComponent.size, actorId, pos, physicsComponent.vel)
+            self.addBody(actorId, actor.getPos(), physicsComponent)
 
     def update(self, deltaSeconds):
         self.world.update(deltaSeconds)
 
+
     def syncVisibleScene(self):
+        eventManager = self.game.eventManager
         actors = self.game.actors
         for actorId, body in self.world.movedBodies.items():
-            actors[actorId].setPos(body.pos[1], body.pos[0])
+            pos = body.pos
+            actors[actorId].setPos(pos)
+            eventManager.enqueue({'name': 'on_actor_moved', 'data': actorId})
+            if pos[0] == body.minBounds[0]:
+                eventManager.enqueue({'name': 'on_physics_min_bounds_x', 'data': actorId})
+            if pos[0] == body.maxBounds[0]:
+                eventManager.enqueue({'name': 'on_physics_max_bounds_x', 'data': actorId})
+            if pos[1] == body.minBounds[1]:
+                eventManager.enqueue({'name': 'on_physics_min_bounds_y', 'data': actorId})
+            if pos[1] == body.maxBounds[1]:
+                eventManager.enqueue({'name': 'on_physics_max_bounds_y', 'data': actorId})
 
     # // Initialization of Physics Objects virtual
     # // void VAddSphere(float radius, WeakActorPtr actor, const Mat4x4& initialTransform, const std::string& densityStr, const std::string& physicsMaterial)=0;
-    def addBox(self, size, actorId, pos, vel):
+    def addBody(self, actorId, pos, physicsComponent):
         body = Body()
         body.actorId = actorId
         body.setPos(pos)
-        body.setVel(vel)
-        body.addBoxCollisionShape(size, (0, 0))
+        body.setVel(physicsComponent.vel)
+        body.setSize(physicsComponent.size)
+        body.setMinBounds(physicsComponent.minBounds)
+        body.setMaxBounds(physicsComponent.maxBounds)
         self.world.addBody(body)
 
     def removeActor(self, actorId):

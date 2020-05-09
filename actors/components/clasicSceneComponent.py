@@ -9,9 +9,9 @@ class ClasicSceneComponent(ActorComponent):
     def init(self, game, cfg):
         ActorComponent.init(self, game)
         self.lives = cfg.get('lives', 3)
-        game.eventManager.bind(on_alienarmy_dead=self.handleAlienArmyDead)
+        game.eventManager.bind(on_alienarmy_dead=self._handleAlienArmyDead)
     
-    def handleAlienArmyDead(self, *args, **kwargs):
+    def _handleAlienArmyDead(self, *args, **kwargs):
         alienArmyId = kwargs.get('data')
         alienArmyActor = self.getActor(alienArmyId)
         alienArmyActor.getComponent('AlienArmyController').state = 'UNINITIALIZED'
