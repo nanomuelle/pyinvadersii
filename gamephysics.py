@@ -25,7 +25,11 @@ class GamePhysics(GamePhysicsBase):
 
     def update(self, deltaSeconds):
         self.world.update(deltaSeconds)
-
+        for pair in self.world.collisions:
+            self.game.eventManager.enqueue({
+                'name': 'on_collision',
+                'data': (pair[0].actorId, pair[1].actorId)
+            })
 
     def syncVisibleScene(self):
         eventManager = self.game.eventManager
@@ -53,6 +57,8 @@ class GamePhysics(GamePhysicsBase):
         body.setSize(physicsComponent.size)
         body.setMinBounds(physicsComponent.minBounds)
         body.setMaxBounds(physicsComponent.maxBounds)
+        body.collisionGroup = physicsComponent.collisionGroup
+        body.collidesWith = physicsComponent.collidesWith
         self.world.addBody(body)
 
     def removeActor(self, actorId):

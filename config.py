@@ -3,7 +3,7 @@ import constants as c
 rows = 20
 cols = 40
 gameConfig = {
-    "frameDelay": 1 / 60,
+    "frameDelay": 1 / 120,
     "rows": rows,
     "cols": cols,
     "bgcolor": c.BG_COLOR_BLACK,
@@ -20,8 +20,10 @@ gameConfig = {
                 "Transform": {},
                 "Physics": {
                     "size": (1.0, 1.0),
-                    "vel": (0, -20),
-                    "minY": 0
+                    "vel": (0, -10),
+                    "minY": 0,
+                    "collisionGroup": "gun-bullet",
+                    "collidesWith": ["alien", "shield", "ufo"]
                 },
                 "BulletController": {},
                 "AnsiRender": {
@@ -37,8 +39,10 @@ gameConfig = {
                 "Transform": {},
                 "Physics": {
                     "size": (1.0, 1.0),
-                    "vel": (0, 10),
-                    "maxY": rows
+                    "vel": (0, 5),
+                    "maxY": rows,
+                    "collisionGroup": "alien-bullet",
+                    "collidesWith": ["gun", "shield"]
                 },
                 "BulletController": {},
                 "AnsiRender": {"sprite": [
@@ -55,7 +59,8 @@ gameConfig = {
                     "size": (3.0, 1.0),
                     "vel": (0.0, 0.0),
                     "minX": 1,
-                    "maxX": cols - 4
+                    "maxX": cols - 4,
+                    "collisionGroup": "gun",
                 },
                 "FireController": {
                     "ammoCapacity": 1,
@@ -77,7 +82,8 @@ gameConfig = {
                 "Physics": {
                     "size": (3.0, 1.0),
                     "minX": 1,
-                    "maxX": cols - 4
+                    "maxX": cols - 4,
+                    "collisionGroup": "alien",
                 },
                 "AlienController": {"fireProb": 0.0005},
                 "FireController": {
@@ -106,7 +112,8 @@ gameConfig = {
                     "size": (4.0, 1.0),
                     "vel": (-20.0, 0.0),
                     "minX": -10.0,
-                    "maxX": cols + 10.0
+                    "maxX": cols + 10.0,
+                    "collisionGroup": "ufo",
                 },
                 "UfoController": {},
                 "AnsiRender": {"sprite": [
@@ -121,7 +128,10 @@ gameConfig = {
             "col": 0,
             "components": {
                 "Transform": {"pos": (0.0, rows - 4)},
-                "Physics": {"size": (1.0, 1.0)},
+                "Physics": {
+                    "size": (1.0, 1.0),
+                    "collisionGroup": "shield",
+                },
                 "ShieldController": {
                     "maxDamage": 4,
                     "onMaxDamageActions": [

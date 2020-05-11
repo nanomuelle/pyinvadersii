@@ -14,20 +14,20 @@ class ScoreControllerComponent(ActorComponent):
         self.pointsPerUfo = cfg.get('pointsPerUfo', 100)
         game.eventManager.bind(on_collision=self.calculateScore)
 
+    def calcularPuntos(self, actorId):
+        actor = self.getActor(actorId)
+        if actor:
+            if actor.tag == 'alien':
+                return self.pointsPerAlien
+            if actor.tag == 'ufo':
+                return self.pointsPerUfo
+        return 0
+
     def calculateScore(self, *args, **kwargs):
         data = kwargs.get('data')
         actor1 = self.getActor(data[0])
-        actor2 = self.getActor(data[1])
-        if actor1.tag != 'gun-bullet':
-            return
-
-        points = 0
-        if actor2.tag == 'alien':
-            points = self.pointsPerAlien
-
-        if actor2.tag == 'ufo':
-            points = self.pointsPerUfo
-
+        actor2 = self.getActor(data[1])    
+        points = self.calcularPuntos(actor1) + self.calcularPuntos(actor2)
         if points > 0:
             self.score += points
             actor = self.getActor()

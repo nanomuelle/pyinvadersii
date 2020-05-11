@@ -14,3 +14,5 @@ class PhysicsComponent(ActorComponent):
         self.vel = cfg.get('vel', (0.0, 0.0))
         self.minBounds = (cfg.get('minX', -math.inf), cfg.get('minY', -math.inf))
         self.maxBounds = (cfg.get('maxX', math.inf), cfg.get('maxY', math.inf))
+        self.collisionGroup = cfg.get('collisionGroup', False)
+        self.collidesWith = cfg.get('collidesWith', [])

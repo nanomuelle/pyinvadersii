@@ -7,7 +7,7 @@ class World:
         self.bodies = {}
         self.movedBodies = {}
         self.collisionGroups = {}
-        self.collisionPairs = {}
+        self.collisionPairs = set()
 
     def _move(self, deltaTime):
         def moveBody(body):
@@ -33,31 +33,45 @@ class World:
                 self.collisionGroups.get(collisionPair[0]),
                 self.collisionGroups.get(collisionPair[1])
             )
+        self.collisions = set(collisions)
 
     def update(self, deltaTime):
         self._moveBodies(deltaTime)
         self._checkCollisions()
+        # if self.collisions:
+        #     print("Collisions {}".format(self.collisions))
 
     def addBody(self, body):
+        # print("world adding body ({}) group {}".format(body.actorId, body.collisionGroup))
         self.bodies[body.actorId] = body
         groupName = body.collisionGroup
         if groupName:
-            groupList = self.collisionGroups.get(groupName, [])
+            groupList = self.collisionGroups.get(groupName, set())
             if not groupList:
-                self.collisionGroups[groupList] = groupList
-            groupList.append(body)
+                self.collisionGroups[groupName] = groupList
+                # print("world created groupList {}".format(groupName))    
+            groupList.add(body)
 
             if body.collidesWith:
                 for collideGroupName in body.collidesWith:
+                    collideGroupList = self.collisionGroups.get(collideGroupName, set())
+                    if not collideGroupList:
+                        self.collisionGroups[collideGroupName] = collideGroupList
                     pair = (groupName, collideGroupName)
                     self.collisionPairs.add(pair)
+                    # print("world collisionPairs {}".format(self.collisionPairs))
 
     def removeBodyByActorId(self, actorId):
-        if self.getBodyByActorId(actorId):
+        # print("removeBodyByActorId {} ".format(actorId))
+
+        body = self.getBodyByActorId(actorId)
+        if body:
+            for groupList in self.collisionGroups.values():
+                if body in groupList:
+                    groupList.discard(body)
             del self.bodies[actorId]
-            for groupList in self.collisionGroups:
-                if body.collisionGroup in groupList
+
     def getBodyByActorId(self, actorId):
         return self.bodies.get(actorId, False)
 
-    def addCollisionPairSet( collisionPairSet ):
+    # def addCollisionPairSet( collisionPairSet ):

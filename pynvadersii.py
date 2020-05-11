@@ -132,69 +132,69 @@ class Invaders:
             actionRunner(deltaTime, action.get('params'))
         self.actions = []
     
-    def checkCollision(self, actor1, actor2):
-        pos1 = actor1.getPos()
-        pos2 = actor2.getPos()
+    # def checkCollision(self, actor1, actor2):
+    #     pos1 = actor1.getPos()
+    #     pos2 = actor2.getPos()
 
-        sameRow = abs(pos1[1] - pos2[0]) < 1
-        if not sameRow:
-            return False
+    #     sameRow = abs(pos1[1] - pos2[0]) < 1
+    #     if not sameRow:
+    #         return False
 
-        actor1W = actor1.getComponent('Physics').size[0]        
-        cond1 = pos2[0] >= pos1[0] and pos2[0] <= pos1[0] + actor1W
-        if cond1:
-            return True
+    #     actor1W = actor1.getComponent('Physics').size[0]        
+    #     cond1 = pos2[0] >= pos1[0] and pos2[0] <= pos1[0] + actor1W
+    #     if cond1:
+    #         return True
         
-        actor2W = actor2.getComponent('Physics').size[0]
-        return pos1[0] >= pos2[0] and pos1[0] <= pos2[0] + actor2W
+    #     actor2W = actor2.getComponent('Physics').size[0]
+    #     return pos1[0] >= pos2[0] and pos1[0] <= pos2[0] + actor2W
 
-    def checkCollisions(self, deltaTime):
-        army = self.findActorByTag('alien-army')
-        shields = self.findActorsByTag('shield')
-        bullet = self.findActorByTag('gun-bullet')
-        if bullet:
-            armyController = army.getComponent('AlienArmyController')
-            # ufo = self.actors.get(armyController.ufoId, False)
-            # if ufo:
-            #     if self.checkCollision(bullet, ufo):
-            #         self.eventManager.enqueue({
-            #             'name': 'on_collision',
-            #             'data': (bullet.id, ufo.id)
-            #         })
-            for alienId in armyController.aliens:
-                alien = self.actors.get(alienId, False)
-                if alien:
-                    if self.checkCollision(bullet, alien):
-                        self.eventManager.enqueue({
-                            'name': 'on_collision',
-                            'data': (bullet.id, alien.id)
-                        })
-                        break
-            for shieldId in shields:
-                shield = self.actors.get(shieldId, False)
-                if shield:
-                    if self.checkCollision(bullet, shield):
-                        self.eventManager.enqueue({
-                            'name': 'on_collision',
-                            'data': (bullet.id, shield.id)
-                        })
+    # def checkCollisions(self, deltaTime):
+    #     army = self.findActorByTag('alien-army')
+    #     shields = self.findActorsByTag('shield')
+    #     bullet = self.findActorByTag('gun-bullet')
+    #     if bullet:
+    #         armyController = army.getComponent('AlienArmyController')
+    #         # ufo = self.actors.get(armyController.ufoId, False)
+    #         # if ufo:
+    #         #     if self.checkCollision(bullet, ufo):
+    #         #         self.eventManager.enqueue({
+    #         #             'name': 'on_collision',
+    #         #             'data': (bullet.id, ufo.id)
+    #         #         })
+    #         for alienId in armyController.aliens:
+    #             alien = self.actors.get(alienId, False)
+    #             if alien:
+    #                 if self.checkCollision(bullet, alien):
+    #                     self.eventManager.enqueue({
+    #                         'name': 'on_collision',
+    #                         'data': (bullet.id, alien.id)
+    #                     })
+    #                     break
+    #         for shieldId in shields:
+    #             shield = self.actors.get(shieldId, False)
+    #             if shield:
+    #                 if self.checkCollision(bullet, shield):
+    #                     self.eventManager.enqueue({
+    #                         'name': 'on_collision',
+    #                         'data': (bullet.id, shield.id)
+    #                     })
 
-        alienBullets = self.findActorsByTag('alien-bullet')
-        for alienBulletId in alienBullets:
-            alienBullet = self.actors.get(alienBulletId, False)
-            if alienBullet:
-                for shieldId in shields:
-                    shield = self.actors.get(shieldId, False)
-                    if shield:
-                        if self.checkCollision(alienBullet, shield):
-                            self.eventManager.enqueue({
-                                'name': 'on_collision',
-                                'data': (alienBullet.id, shield.id)
-                            })
-                gun = self.findActorByTag('gun')
-                if gun:
-                    if self.checkCollision(alienBullet, gun):
-                        self.gameOver = True
+    #     alienBullets = self.findActorsByTag('alien-bullet')
+    #     for alienBulletId in alienBullets:
+    #         alienBullet = self.actors.get(alienBulletId, False)
+    #         if alienBullet:
+    #             for shieldId in shields:
+    #                 shield = self.actors.get(shieldId, False)
+    #                 if shield:
+    #                     if self.checkCollision(alienBullet, shield):
+    #                         self.eventManager.enqueue({
+    #                             'name': 'on_collision',
+    #                             'data': (alienBullet.id, shield.id)
+    #                         })
+    #             gun = self.findActorByTag('gun')
+    #             if gun:
+    #                 if self.checkCollision(alienBullet, gun):
+    #                     self.gameOver = True
 
     def start(self):
         print()
@@ -218,7 +218,7 @@ class Invaders:
             self.gameLogic(deltaTime)
 
             self.processActions(deltaTime)
-            self.checkCollisions(deltaTime)
+            # self.checkCollisions(deltaTime)
             self.eventManager.dispatchEvents(deltaTime)
             self.render(deltaTime)
 
