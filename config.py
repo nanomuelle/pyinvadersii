@@ -124,7 +124,6 @@ gameConfig = {
                 "Physics": {"size": (1.0, 1.0)},
                 "ShieldController": {
                     "maxDamage": 4,
-                    "damage": 0,
                     "onMaxDamageActions": [
                         {'name': 'removeActor', 'params': 'self'},
                     ]
