@@ -35,7 +35,8 @@ class AlienArmyControllerComponent(ActorComponent):
         self.ivel = self.initialIVel
         self.alienCfg['components']['AlienController']['fireProb'] += 0.001
         self.aliens = []
-        for row in range(self.initialRow, self.initialRow + self.rows):
+        for rowIndex in range(self.rows):
+            row = self.initialRow + rowIndex
             for index in range(self.perRow):
                 alienCfg = copy.deepcopy(self.alienCfg)
                 alienCfg['components']['Transform']["pos"] = (self.initialCol + (index * self.step),row)

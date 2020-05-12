@@ -9,6 +9,9 @@ class AnsiRenderComponent(ActorComponent):
     def init(self, game, cfg):
         ActorComponent.init(self, game)
         self.sprite = cfg.get('sprite', [""])
+        if isinstance(self.sprite, str):
+            self.sprite = self.sprite.split()
+
         self.frame = cfg.get('frame', 0)
         self.animationTime = cfg.get('animationTime', False)
         self.elapsedTime = 0

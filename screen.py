@@ -14,15 +14,15 @@ class Screen:
             self.screen.append(list(" " * int(self.cols)))
 
     def drawChars(self, row, col, chars):
-        r = int(round(row))
-        c = int(round(col))
-        if r < 0 or r >= self.rows:
+        # r = int(round(row))
+        # c = int(round(col))
+        if row < 0 or row >= self.rows:
             return
 
         for index, char in enumerate(chars):
-            currentCol = c + index
+            currentCol = col + index
             if currentCol >= 0 and currentCol < self.cols:
-                self.screen[r][currentCol] = char
+                self.screen[row][currentCol] = char
 
     def render(self):
         print(" ┌" + "─" * self.cols + "┐")

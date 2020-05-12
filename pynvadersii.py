@@ -107,15 +107,29 @@ class Invaders:
     def render(self, deltaTime):
         self.screen.clear()
         for (_, actor) in self.actors.items():
-            renderComponent = actor.components.get('Render', False)
-            if (renderComponent):
-                pos = actor.getPos()
-                self.screen.drawChars(
-                    pos[1],
-                    pos[0],
-                    renderComponent.getCurrentSprite()
-                )
+            (row, col, sprite) = self.getRenderData(actor)
+            if sprite:
+                self.screen.drawChars(row, col, sprite)
+            # renderComponent = actor.components.get('Render', False)
+            # if (renderComponent):
+            #     # pos = actor.getPos()
+            #     (row, col) = self.getScreenPos(actor)
+            #     self.screen.drawChars(
+            #         row,
+            #         col,
+            #         renderComponent.getCurrentSprite()
+            #     )
         self.screen.render()
+
+    def getRenderData(self, actor):
+        renderComponent = actor.components.get('Render', False)
+        if not renderComponent:
+            return (False, False, False)
+        pos = actor.getPos()
+        sprite = renderComponent.getCurrentSprite()
+        col = int(round(pos[0] - len(sprite) / 2))
+        row = int(round(pos[1] - 0.5)) 
+        return (row, col, sprite)
 
     def gameLogic(self, deltaTime):
         for (_, actor) in self.actors.items():

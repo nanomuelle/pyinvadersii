@@ -3,7 +3,7 @@ import constants as c
 rows = 20
 cols = 40
 gameConfig = {
-    "frameDelay": 1 / 120,
+    "frameDelay": 1 / 60,
     "rows": rows,
     "cols": cols,
     "bgcolor": c.BG_COLOR_BLACK,
@@ -19,7 +19,7 @@ gameConfig = {
             "components": {
                 "Transform": {},
                 "Physics": {
-                    "size": (1.0, 1.0),
+                    "size": (0.1, 0.4),
                     "vel": (0, -10),
                     "minY": 0,
                     "collisionGroup": "gun-bullet",
@@ -38,7 +38,7 @@ gameConfig = {
             "components": {
                 "Transform": {},
                 "Physics": {
-                    "size": (1.0, 1.0),
+                    "size": (0.1, 0.4),
                     "vel": (0, 5),
                     "maxY": rows,
                     "collisionGroup": "alien-bullet",
@@ -46,27 +46,27 @@ gameConfig = {
                 },
                 "BulletController": {},
                 "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_CYAN + "╎" + c.RESET]
+                    [c.BOLD + c.FG_COLOR_CYAN + "|" + c.RESET]
                 ]}
             }
         },
         "gun": {
             "tag": "gun",
             "components": {
-                "Transform": {"pos": (cols / 2, rows - 1)},
+                "Transform": {"pos": (cols / 2, rows - 0.5)},
                 "ControlledByUser": { "vel": 20.0 },
                 "Physics": {
                     "size": (3.0, 1.0),
                     "vel": (0.0, 0.0),
-                    "minX": 1,
-                    "maxX": cols - 4,
+                    "minX": 1.5,
+                    "maxX": cols - 1.5,
                     "collisionGroup": "gun",
                 },
                 "FireController": {
                     "ammoCapacity": 1,
                     "ammo": 1,
                     "rowOffset": -1,
-                    "colOffset": 1,
+                    "colOffset": 0,
                     "bullet": "gun-bullet",
                 },
                 "GunRender": {"sprite": [
@@ -156,7 +156,7 @@ gameConfig = {
             "row": 0,
             "col": cols - 13,
             "components": {
-                "Transform": {"pos": (cols - 13, 0.0)},
+                "Transform": {"pos": (cols - 7.0, 0.0)},
                 "ScoreController": {"pointsPerAlien": 10},
                 "TextRender": {
                     "text": "SCORE:{}",
@@ -171,49 +171,49 @@ gameConfig = {
             "initialActors": [
                 # title
                 {"components": {
-                    "Transform": {"pos": (70.0, 1.0)},
-                    "Physics": {"vel": (-40.0, 0.0), "minX": 11.0},
+                    "Transform": {"pos": (70.0, 1.5)},
+                    "Physics": {"vel": (-40.0, 0.0), "minX": 0.5 + cols / 2},
                     "AnsiRender": {"sprite": [r" _, __,  _,  _, __,"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (80, 2)},
-                    "Physics": {"vel": (-40, 0), "minX": 11},
+                    "Transform": {"pos": (80.0, 2.5)},
+                    "Physics": {"vel": (-40, 0), "minX": cols / 2},
                     "AnsiRender": {"sprite": [r"(_  |_) / \ / ` |_"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (90, 3)},
-                    "Physics": {"vel": (-40, 0), "minX": 11},
+                    "Transform": {"pos": (90.0, 3.5)},
+                    "Physics": {"vel": (-40, 0), "minX": cols / 2},
                     "AnsiRender": {"sprite": [r", ) |   |~| \ , | "]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (100, 4)},
-                    "Physics": {"vel": (-40, 0), "minX": 11},
+                    "Transform": {"pos": (100.0, 4.5)},
+                    "Physics": {"vel": (-40, 0), "minX": 0.5 + cols / 2},
                     "AnsiRender": {"sprite": [r" ~  ~   ~ ~  ~  ~~~"]}
                 }},
 
                 {"components": {
-                    "Transform": {"pos": (110, 5)},
-                    "Physics": {"vel": (-40, 0), "minX": 5},
+                    "Transform": {"pos": (110, 5.5)},
+                    "Physics": {"vel": (-40, 0), "minX": 0.5 + cols / 2},
                     "AnsiRender": {"sprite": [r"_ _, _ _,_  _, __, __, __,  _,"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (120, 6)},
-                    "Physics": {"vel": (-40, 0), "minX": 5},
+                    "Transform": {"pos": (120, 6.5)},
+                    "Physics": {"vel": (-40, 0), "minX": cols / 2},
                     "AnsiRender": {"sprite": [r"| |\ | | / / \ | \ |_  |_) (_"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (130, 7)},
-                    "Physics": {"vel": (-40, 0), "minX": 5},
+                    "Transform": {"pos": (130, 7.5)},
+                    "Physics": {"vel": (-40, 0), "minX": 0.5 + cols / 2},
                     "AnsiRender": {"sprite": [r"| | \| |/  |~| |_/ |   | \ , )"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (140, 8)},
-                    "Physics": {"vel": (-40, 0), "minX": 5},
+                    "Transform": {"pos": (140, 8.5)},
+                    "Physics": {"vel": (-40, 0), "minX": cols / 2},
                     "AnsiRender": {"sprite": [r"~ ~  ~ ~   ~ ~ ~   ~~~ ~ ~  ~"]}
                 }},
                 {"components": {
-                    "Transform": {"pos": (9, 100)},
-                    "Physics": {"vel": (0, -30), "minY": 12},
+                    "Transform": {"pos": (cols / 2, 100.5)},
+                    "Physics": {"vel": (0, -30), "minY": 12.5},
                     "AnsiRender": {
                         "sprite": [
                             [c.BOLD + c.BG_COLOR_MAGENTA + "P", "R", "E", "S", "S", " ",
@@ -234,31 +234,31 @@ gameConfig = {
             "initialActors": [
                 # level name
                 {"components": {
-                    "Transform": {"pos": (1.0, 0.0)},
+                    "Transform": {"pos": (8.5, 0.0)},
                     "TextRender": {"text": "SPACE INVADERS"}
                 }},
                 # score
                 {"template": "score"},
                 # shields
-                {"template": "shield", "components": {"Transform": {"pos": (10, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (7.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (8.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (9.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (9.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (6.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (7.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (8.5, rows - 3.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (14.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (15.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (16.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (17.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (13.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (14.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (15.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (16.5, rows - 3.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (22.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (23.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (24.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (25.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (21.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (22.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (23.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (24.5, rows - 3.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (30.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (31.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (32.0, rows - 4)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (33.0, rows - 4)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (29.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (30.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (31.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (32.5, rows - 3.5)}}},
                 # gun
                 {"template": "gun"},
                 # alienArmy"
@@ -269,10 +269,10 @@ gameConfig = {
                         "vel": 1.0,
                         "ivel": 0.2,
                         "rows": 4,
-                        "perRow": 8,
-                        "step": 4,
-                        "initialRow": 2,
-                        "initialCol": 5
+                        "perRow": 7,
+                        "step": 5,
+                        "initialRow": 2.5,
+                        "initialCol": 5.5
                     }
                 }},
                 # Scene

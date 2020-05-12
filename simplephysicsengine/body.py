@@ -5,7 +5,7 @@ import math
 class Body:
     def __init__(self):
         self.actorId = None
-
+        
         self.oldPos = (0, 0)
         self.pos = (0, 0)
 
@@ -14,6 +14,7 @@ class Body:
 
         self.oldSize = (1, 1)
         self.size = (1, 1)
+        self._halfSize = (0.5, 0.5)
 
         self.oldMinBounds = (-math.inf, -math.inf)
         self.minBounds = (-math.inf, -math.inf)
@@ -22,6 +23,14 @@ class Body:
         self.maxBounds = (math.inf, math.inf)
                 
         # self.collisionShape = None
+
+    def getLTRB(self):
+        return (
+            self.pos[0] - self._halfSize[0],
+            self.pos[1] - self._halfSize[1],
+            self.pos[0] + self._halfSize[0],
+            self.pos[1] + self._halfSize[1]
+        )
 
     def setPos(self, pos):
         self.oldPos = self.pos
@@ -34,6 +43,7 @@ class Body:
     def setSize(self, size):
         self.oldSize = self.size
         self.size = size
+        self._halfSize = (size[0] / 2, size[1] / 2)
 
     def setMinBounds(self, minBounds):
         self.oldMinBounds = self.minBounds
