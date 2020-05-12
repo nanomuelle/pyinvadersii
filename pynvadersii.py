@@ -69,6 +69,7 @@ class Invaders:
         if params in self.actors:
             del self.actors[params]
             self.eventManager.enqueue({ 'name': 'on_actor_removed', 'data': params })
+            # print("removeActorAction {}".format(params))
 
     def nextSceneAction(self, deltaTime, params):
         actorIds = list(self.actors.keys())[:]
@@ -110,15 +111,6 @@ class Invaders:
             (row, col, sprite) = self.getRenderData(actor)
             if sprite:
                 self.screen.drawChars(row, col, sprite)
-            # renderComponent = actor.components.get('Render', False)
-            # if (renderComponent):
-            #     # pos = actor.getPos()
-            #     (row, col) = self.getScreenPos(actor)
-            #     self.screen.drawChars(
-            #         row,
-            #         col,
-            #         renderComponent.getCurrentSprite()
-            #     )
         self.screen.render()
 
     def getRenderData(self, actor):
@@ -228,11 +220,9 @@ class Invaders:
             
             self.physics.update(deltaTime)
             self.physics.syncVisibleScene()
-
+            
             self.gameLogic(deltaTime)
-
             self.processActions(deltaTime)
-            # self.checkCollisions(deltaTime)
             self.eventManager.dispatchEvents(deltaTime)
             self.render(deltaTime)
 

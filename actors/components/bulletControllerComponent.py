@@ -24,7 +24,8 @@ class BulletControllerComponent(ActorComponent):
             self._addRemoveActorAction()
 
     def _addRemoveActorAction(self):
-        self.game.addActions(
-            self.actorId,
-            [{'name': 'removeActor', 'params': self.actorId }]
-        )
+        self.game.removeActorAction(0, self.actorId)
+        # self.game.addActions(
+        #     self.actorId,
+        #     [{'name': 'removeActor', 'params': self.actorId }]
+        # )

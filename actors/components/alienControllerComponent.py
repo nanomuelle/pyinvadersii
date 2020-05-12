@@ -9,7 +9,7 @@ class AlienControllerComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
-        self.fireProb = cfg.get('fireProb', 0.01)
+        self.fireProb = cfg.get('fireProb', 0.005)
 
     def update(self, deltaTime):
         if random.random() <= self.fireProb:

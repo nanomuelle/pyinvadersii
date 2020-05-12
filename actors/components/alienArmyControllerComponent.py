@@ -23,12 +23,9 @@ class AlienArmyControllerComponent(ActorComponent):
         self.aliens = []
         # self.ufoId = -1
         self.state = "UNINITIALIZED"
-        # self.game.eventManager.bind(on_horizontal_bounds_max_col=self.handleBounds)
-        # self.game.eventManager.bind(on_horizontal_bounds_min_col=self.handleBounds)
         self.game.eventManager.bind(on_physics_min_bounds_x=self.handleBounds)
         self.game.eventManager.bind(on_physics_max_bounds_x=self.handleBounds)
         self.game.eventManager.bind(on_collision=self.handleCollision)
-        # self.game.eventManager.bind(on_actor_removed=self.handleActorRemoved)
 
     def createAliens(self):
         self.vel = self.initialVel

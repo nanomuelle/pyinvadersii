@@ -3,6 +3,7 @@ from .collisions import checkCollisions
 
 class World:
     def __init__(self):
+        # self.updateId = 0
         self.maxDeltaTime = 1000 / 60
         self.bodies = {}
         self.movedBodies = {}
@@ -39,7 +40,8 @@ class World:
         self._moveBodies(deltaTime)
         self._checkCollisions()
         # if self.collisions:
-        #     print("Collisions {}".format(self.collisions))
+        #     self.updateId += 1
+        #     print("{} Collisions {}".format(self.updateId, self.collisions))
 
     def addBody(self, body):
         # print("world adding body ({}) group {}".format(body.actorId, body.collisionGroup))

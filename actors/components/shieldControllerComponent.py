@@ -11,7 +11,7 @@ class ShieldControllerComponent(ActorComponent):
         ActorComponent.init(self, game)
         self.maxDamage = cfg.get('maxDamage', 4)
         self.damage = cfg.get('damage', 0)
-        self.onMaxDamageActions = cfg.get('onMaxDamageActions', [])
+        # self.onMaxDamageActions = cfg.get('onMaxDamageActions', [])
         game.eventManager.bind(on_collision=self.handleCollision)
 
     def handleCollision(self, *args, **kwargs):
@@ -21,7 +21,8 @@ class ShieldControllerComponent(ActorComponent):
             
     def incDamage(self):
         if self.damage == self.maxDamage:
-            self.game.addActions(self.actorId, self.onMaxDamageActions)
+            self.game.removeActorAction(0, self.actorId)
+            # self.game.addActions(self.actorId, self.onMaxDamageActions)
         else:
             self.damage += 1
             renderComponent = self.getActor().getComponent('Render')
