@@ -104,6 +104,21 @@ gameConfig = {
                 }
             }
         },
+        "explosion": {
+            "tag": "explosion",
+            "components": {
+                "Transform": {"pos": (-1000, -1000)},
+                "ExplosionController": { "duration": 0.3 },
+                "AnsiRender": {
+                    "animationTime": 0.3 / 3, 
+                    "sprite": [
+                        [c.FG_COLOR_RED + "X" + c.RESET],
+                        [c.FG_COLOR_RED + "+" + c.RESET],
+                        [c.FG_COLOR_RED + "." + c.RESET]
+                    ]
+                }
+            }
+        },
         "ufo": {
             "tag": "ufo",
             "components": {
@@ -265,6 +280,7 @@ gameConfig = {
                 {"tag": "alien-army", "components": {
                     "AlienArmyController": {
                         "alienTag": "alien",
+                        "explosionTag": "explosion",
                         # "ufoTag": "ufo",
                         "vel": 1.0,
                         "ivel": 0.2,

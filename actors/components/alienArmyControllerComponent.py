@@ -11,6 +11,7 @@ class AlienArmyControllerComponent(ActorComponent):
     def init(self, game, cfg):
         ActorComponent.init(self, game)
         self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienTag')))
+        self.explosionCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('explosionTag')))
         # self.ufoCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('ufoTag')))
         self.rows = cfg.get("rows", 4)
         self.perRow = cfg.get("perRow", 8)
@@ -35,10 +36,12 @@ class AlienArmyControllerComponent(ActorComponent):
         for rowIndex in range(self.rows):
             row = self.initialRow + rowIndex
             for index in range(self.perRow):
-                alienCfg = copy.deepcopy(self.alienCfg)
-                alienCfg['components']['Transform']["pos"] = (self.initialCol + (index * self.step),row)
-                alienCfg['components']['Physics']['vel'] = (self.vel, 0.0)
-                alien = self.game.createActor(alienCfg)
+                # alienCfg = copy.deepcopy(self.alienCfg)
+                # alienCfg['components']['Transform']["pos"] = (self.initialCol + (index * self.step),row)
+                # alienCfg['components']['Physics']['vel'] = (self.vel, 0.0)
+                alien = self.game.createActor(self.alienCfg)
+                alien.setPos((self.initialCol + (index * self.step),row))
+                alien.getComponent('Physics').vel = (self.vel, 0.0)
                 self.game.addActions(
                     self.actorId,
                     [{'name': 'addActor', 'params': alien }]
@@ -53,8 +56,15 @@ class AlienArmyControllerComponent(ActorComponent):
     #     if self.ufoId == data:
     #         self.ufoId = -1
 
+    def _createExplosionActor(self, pos):
+        explosion = self.game.createActor(self.explosionCfg)
+        explosion.setPos(pos)
+        return explosion
+
     def handleCollision(self, *args, **kwargs):
         data = kwargs.get('data')
+        alienId = data[0] if data[0] in self.aliens else False
+        alienId = data[1] if data[1] in self.aliens else alienId
         # if data[1] == self.ufoId:
         #     self.game.addActions(
         #         self.actorId,
@@ -62,12 +72,14 @@ class AlienArmyControllerComponent(ActorComponent):
         #     )
         #     return
 
-        if data[1] in self.aliens:
-            self.game.addActions(
-                self.actorId,
-                [{'name': 'removeActor', 'params': data[1] }]
-            )
-            self.aliens.remove(data[1])
+        if alienId:
+            alien = self.getActor(alienId)
+            explosion = self._createExplosionActor(alien.getPos())
+            self.game.addActions(self.actorId, [
+                {'name': 'removeActor', 'params': alienId },
+                {'name': 'addActor', 'params': explosion }
+            ])
+            self.aliens.remove(alienId)
             if len(self.aliens) == 0:
                 self.state = 'ALL DEAD'
                 self.game.eventManager.enqueue({

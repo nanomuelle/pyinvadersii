@@ -7,6 +7,7 @@ from .components.autodestroyCollisionComponent import AutodestroyCollisionCompon
 from .components.bulletControllerComponent import BulletControllerComponent
 from .components.clasicSceneComponent import ClasicSceneComponent
 from .components.controlledByUserComponent import ControlledByUserComponent
+from .components.explosionControllerComponent import ExplosionControllerComponent
 from .components.fireControllerComponent import FireControllerComponent
 from .components.followActorComponent import FollowActorComponent
 from .components.gunRenderComponent import GunRenderComponent
@@ -25,6 +26,7 @@ ComponentFactory = {
     "BulletController": BulletControllerComponent,
     "ClasicScene": ClasicSceneComponent,
     "ControlledByUser": ControlledByUserComponent,
+    "ExplosionController": ExplosionControllerComponent,
     "FireController": FireControllerComponent,
     "FollowActor": FollowActorComponent,
     "GunRender": GunRenderComponent,
