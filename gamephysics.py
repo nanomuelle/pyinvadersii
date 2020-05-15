@@ -18,10 +18,11 @@ class GamePhysics(GamePhysicsBase):
 
     def _handleActorAdded(self, *args, **kwargs):
         actorId = kwargs.get('data')
-        actor = self.game.actors[actorId]
-        physicsComponent = actor.getComponent('Physics')
-        if physicsComponent:
-            self.addBody(actorId, actor.getPos(), physicsComponent)
+        actor = self.game.actors.get(actorId, False)
+        if actor:
+            physicsComponent = actor.getComponent('Physics')
+            if physicsComponent:
+                self.addBody(actorId, actor.getPos(), physicsComponent)
 
     def update(self, deltaSeconds):
         self.world.update(deltaSeconds)
