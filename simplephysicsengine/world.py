@@ -4,7 +4,7 @@ from .collisions import checkCollisions
 class World:
     def __init__(self):
         # self.updateId = 0
-        self.maxDeltaTime = 1000 / 60
+        self.maxDeltaTime = 1000 / 30
         self.bodies = {}
         self.movedBodies = {}
         self.collisionGroups = {}
@@ -37,7 +37,8 @@ class World:
         self.collisions = set(collisions)
 
     def update(self, deltaTime):
-        self._moveBodies(deltaTime)
+        delta = min(deltaTime, self.maxDeltaTime)
+        self._moveBodies(delta)
         self._checkCollisions()
         # if self.collisions:
         #     self.updateId += 1
