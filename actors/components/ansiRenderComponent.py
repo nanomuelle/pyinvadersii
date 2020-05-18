@@ -10,7 +10,7 @@ class AnsiRenderComponent(ActorComponent):
         ActorComponent.init(self, game)
         self.sprite = cfg.get('sprite', [""])
         if isinstance(self.sprite, str):
-            self.sprite = self.sprite.split()
+            self.sprite = list(self.sprite)
 
         self.frame = cfg.get('frame', 0)
         self.animationTime = cfg.get('animationTime', False)

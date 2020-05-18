@@ -21,14 +21,31 @@ gameConfig = {
                 "Physics": {
                     "size": (0.4, 0.4),
                     "vel": (0, -10),
-                    "minY": 0,
+                    "minY": 2.5,
                     "collisionGroup": "gun-bullet",
                     "collidesWith": ["alien", "shield", "ufo", "alien-bullet"]
                 },
-                "BulletController": {},
+                "BulletController": {
+                    "explosionActor": "gun-bullet-explosion" 
+                },
                 "AnsiRender": {
                     "sprite": [
                         [c.BOLD + c.FG_COLOR_YELLOW + "|" + c.RESET]
+                    ]
+                }
+            }
+        },
+        "gun-bullet-explosion": {
+            "tag": "gun-bullet-explosion",
+            "components": {
+                "Transform": {},
+                "ExplosionController": { "duration": 0.2 },
+                "AnsiRender": {
+                    "animationTime": 0.2 / 3, 
+                    "sprite": [
+                        [c.FG_COLOR_RED + "X" + c.RESET],
+                        [c.FG_COLOR_RED + "+" + c.RESET],
+                        [c.FG_COLOR_RED + "." + c.RESET]
                     ]
                 }
             }
@@ -40,20 +57,41 @@ gameConfig = {
                 "Physics": {
                     "size": (0.4, 0.4),
                     "vel": (0, 5),
-                    "maxY": rows,
+                    "maxY": rows - 1.5,
                     "collisionGroup": "alien-bullet",
                     "collidesWith": ["shield"]
                 },
-                "BulletController": {},
-                "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_MAGENTA + "|" + c.RESET]
-                ]}
+                "BulletController": {
+                    "explosionActor": "alien-bullet-explosion" 
+                },
+                "AnsiRender": {
+                    "animationTime": 1 / 5,
+                    "sprite": [
+                        [c.BOLD + c.FG_COLOR_MAGENTA + "{" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_MAGENTA + "}" + c.RESET]
+                    ]
+                }
+            }
+        },
+        "alien-bullet-explosion": {
+            "tag": "alien-bullet-explosion",
+            "components": {
+                "Transform": {},
+                "ExplosionController": { "duration": 0.2 },
+                "AnsiRender": {
+                    "animationTime": 0.2 / 3, 
+                    "sprite": [
+                        [c.BOLD + c.FG_COLOR_GREEN + "X" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_GREEN + "+" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_GREEN + "." + c.RESET]
+                    ]
+                }
             }
         },
         "gun": {
             "tag": "gun",
             "components": {
-                "Transform": {"pos": (cols / 2, rows - 0.5)},
+                "Transform": {"pos": (cols / 2, rows - 2.5)},
                 "ControlledByUser": { "vel": 20.0 },
                 "Physics": {
                     "size": (3.0, 1.0),
@@ -104,6 +142,21 @@ gameConfig = {
                 }
             }
         },
+        "alien-explosion": {
+            "tag": "alien-explosion",
+            "components": {
+                "Transform": {},
+                "ExplosionController": { "duration": 0.3 },
+                "AnsiRender": {
+                    "animationTime": 0.3 / 3, 
+                    "sprite": [
+                        [c.BOLD + c.FG_COLOR_CYAN + "X" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_CYAN + "+" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_CYAN + "." + c.RESET]
+                    ]
+                }
+            }
+        },
         "explosion": {
             "tag": "explosion",
             "components": {
@@ -139,42 +192,32 @@ gameConfig = {
         },
         "shield": {
             "tag": "shield",
-            "row": rows - 4,
-            "col": 0,
             "components": {
-                "Transform": {"pos": (0.0, rows - 4)},
+                "Transform": {},
                 "Physics": {
                     "size": (1.0, 1.0),
                     "collisionGroup": "shield",
                 },
-                "ShieldController": {
+                "ShieldController": { 
                     "maxDamage": 4,
-                    # "onMaxDamageActions": [
-                    #     {'name': 'removeActor', 'params': 'self'},
-                    # ]
+                    "explosionActor": "alien-bullet-explosion" 
                 },
-                "AnsiRender": {"sprite": [
-                    [c.BOLD + c.FG_COLOR_BLUE 
-                                        + "█" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_BLUE +
-                        c.BG_COLOR_MAGENTA + "▓" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_MAGENTA +
-                        c.BG_COLOR_BLUE + "▒" + c.RESET],
-                    [c.BOLD + c.FG_COLOR_MAGENTA +
-                        c.BG_COLOR_BLACK + "░" + c.RESET],
+                "AnsiRender": { "sprite": [
+                    [c.BOLD + c.FG_COLOR_GREEN + "█" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "▓" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "▒" + c.RESET],
+                    [c.BOLD + c.FG_COLOR_GREEN + "░" + c.RESET],
                     [" "]
                 ]}
             }
         },
         "score": {
             "tag": "score",
-            "row": 0,
-            "col": cols - 13,
             "components": {
-                "Transform": {"pos": (cols - 7.0, 0.0)},
+                "Transform": {"pos": (4.5, 1.5)},
                 "ScoreController": {"pointsPerAlien": 10},
                 "TextRender": {
-                    "text": "SCORE:{}",
+                    "text": "{}",
                     "value": '000000'
                 }
             }
@@ -247,47 +290,79 @@ gameConfig = {
         {
             "description": "GAMEPLAY",
             "initialActors": [
+                # header
+                {
+                    "components": {
+                        "Transform": {"pos": (cols / 2, 0)},
+                        "TextRender": {"text": "SCORE(1)       HI-SCORE       SCORE(2)"}
+                    } 
+                },
+                # score 1
+                {"template": "score"},
+                # footer
+                {
+                    "components": {
+                        "Transform": {"pos": (cols / 2, rows - 1.5)},
+                        "TextRender": {
+                            "format": c.FG_COLOR_GREEN,
+                            "text": "________________________________________"
+                        }
+                    }
+                },
+                # lives
+                {
+                    "components": {
+                        "Transform": {"pos": (1, rows - 0.5)},
+                        "TextRender": {
+                            "text": " {}",
+                            "value": "3"
+                        }
+                    }
+                },
+                # credits
+                {
+                    "components": {
+                        "Transform": {"pos": (cols - 6, rows - 0.5)},
+                        "TextRender": {
+                            "text": "CREDITS {}",
+                            "value": "00"
+                        }
+                    }
+                },
                 # gun
                 {"template": "gun"},
-                # level name
-                {"components": {
-                    "Transform": {"pos": (8.5, 0.0)},
-                    "TextRender": {"text": "SPACE INVADERS"}
-                }},
-                # score
-                {"template": "score"},
                 # shields
-                {"template": "shield", "components": {"Transform": {"pos": (9.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (6.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (7.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (8.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (9.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (6.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (7.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (8.5, rows - 4.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (13.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (14.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (15.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (16.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (13.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (14.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (15.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (16.5, rows - 4.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (21.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (22.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (23.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (24.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (21.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (22.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (23.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (24.5, rows - 4.5)}}},
 
-                {"template": "shield", "components": {"Transform": {"pos": (29.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (30.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (31.5, rows - 3.5)}}},
-                {"template": "shield", "components": {"Transform": {"pos": (32.5, rows - 3.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (29.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (30.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (31.5, rows - 4.5)}}},
+                {"template": "shield", "components": {"Transform": {"pos": (32.5, rows - 4.5)}}},
                 # alienArmy"
                 {"tag": "alien-army", "components": {
                     "AlienArmyController": {
-                        "alienTag": "alien",
-                        "explosionTag": "explosion",
+                        "alienActor": "alien",
+                        "explosionActor": "alien-explosion",
                         # "ufoTag": "ufo",
                         "vel": 1.0,
                         "ivel": 0.2,
                         "rows": 4,
                         "perRow": 8,
                         "step": 4,
-                        "initialRow": 2.5,
+                        "initialRow": 3.5,
                         "initialCol": 5.5
                     }
                 }},

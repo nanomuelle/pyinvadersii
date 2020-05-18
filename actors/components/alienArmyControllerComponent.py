@@ -10,8 +10,8 @@ class AlienArmyControllerComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
-        self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienTag')))
-        self.explosionCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('explosionTag')))
+        self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienActor')))
+        self.explosionCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('explosionActor')))
         # self.ufoCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('ufoTag')))
         self.rows = cfg.get("rows", 4)
         self.perRow = cfg.get("perRow", 8)
@@ -36,9 +36,6 @@ class AlienArmyControllerComponent(ActorComponent):
         for rowIndex in range(self.rows):
             row = self.initialRow + rowIndex
             for index in range(self.perRow):
-                # alienCfg = copy.deepcopy(self.alienCfg)
-                # alienCfg['components']['Transform']["pos"] = (self.initialCol + (index * self.step),row)
-                # alienCfg['components']['Physics']['vel'] = (self.vel, 0.0)
                 alien = self.game.createActor(self.alienCfg)
                 alien.setPos((self.initialCol + (index * self.step),row))
                 alien.getComponent('Physics').vel = (self.vel, 0.0)
@@ -74,10 +71,10 @@ class AlienArmyControllerComponent(ActorComponent):
 
         if alienId:
             alien = self.getActor(alienId)
-            explosion = self._createExplosionActor(alien.getPos())
+            # explosion = self._createExplosionActor(alien.getPos())
             self.game.addActions(self.actorId, [
                 {'name': 'removeActor', 'params': alienId },
-                {'name': 'addActor', 'params': explosion }
+                # {'name': 'addActor', 'params': explosion }
             ])
             self.aliens.remove(alienId)
             if len(self.aliens) == 0:
