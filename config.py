@@ -39,9 +39,9 @@ gameConfig = {
             "tag": "gun-bullet-explosion",
             "components": {
                 "Transform": {},
-                "ExplosionController": { "duration": 0.2 },
+                "ExplosionController": { "duration": 0.1 },
                 "AnsiRender": {
-                    "animationTime": 0.2 / 3, 
+                    "animationTime": 0.1 / 3, 
                     "sprite": [
                         [c.FG_COLOR_RED + "X" + c.RESET],
                         [c.FG_COLOR_RED + "+" + c.RESET],
@@ -77,9 +77,9 @@ gameConfig = {
             "tag": "alien-bullet-explosion",
             "components": {
                 "Transform": {},
-                "ExplosionController": { "duration": 0.2 },
+                "ExplosionController": { "duration": 0.1 },
                 "AnsiRender": {
-                    "animationTime": 0.2 / 3, 
+                    "animationTime": 0.1 / 3, 
                     "sprite": [
                         [c.BOLD + c.FG_COLOR_GREEN + "X" + c.RESET],
                         [c.BOLD + c.FG_COLOR_GREEN + "+" + c.RESET],
@@ -146,13 +146,13 @@ gameConfig = {
             "tag": "alien-explosion",
             "components": {
                 "Transform": {},
-                "ExplosionController": { "duration": 0.3 },
+                "ExplosionController": { "duration": 0.1 },
                 "AnsiRender": {
-                    "animationTime": 0.3 / 3, 
+                    "animationTime": 0.1 / 3, 
                     "sprite": [
-                        [c.BOLD + c.FG_COLOR_CYAN + "X" + c.RESET],
-                        [c.BOLD + c.FG_COLOR_CYAN + "+" + c.RESET],
-                        [c.BOLD + c.FG_COLOR_CYAN + "." + c.RESET]
+                        [c.BOLD + c.FG_COLOR_WHITE + "X" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_WHITE + "+" + c.RESET],
+                        [c.BOLD + c.FG_COLOR_WHITE + "." + c.RESET]
                     ]
                 }
             }
@@ -311,11 +311,26 @@ gameConfig = {
                 },
                 # lives
                 {
+                    "tag": "lives",
+                    "components": {
+                        "Transform": {"pos": (5.5, rows - 0.5)},
+                        "AnsiRender": {
+                            "sprite": [
+                                [c.FG_COLOR_WHITE + "╧", " ", "╧", " ", "╧" + c.RESET],
+                                [c.FG_COLOR_WHITE + "╧", " ", "╧", " ", " " + c.RESET],
+                                [c.FG_COLOR_WHITE + "╧", " ", " ", " ", " " + c.RESET],
+                                [c.FG_COLOR_WHITE + " ", " ", " ", " ", " " + c.RESET],
+                            ]
+                        }
+                    }
+                },
+                {
+                    "tag": "livesNumber",
                     "components": {
                         "Transform": {"pos": (1, rows - 0.5)},
                         "TextRender": {
                             "text": " {}",
-                            "value": "3"
+                            "value": 3
                         }
                     }
                 },
@@ -370,7 +385,8 @@ gameConfig = {
                 {"components": {
                     "ClasicScene": {
                         "lives": 3,
-                        "alienArmyTag": "alien-army",
+                        "livesTag": "lives",
+                        "livesNumberTag": "livesNumber",
                         "playerTag": "gun"
                     }
                 }}

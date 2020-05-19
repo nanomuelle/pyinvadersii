@@ -9,6 +9,8 @@ class ClasicSceneComponent(ActorComponent):
     def init(self, game, cfg):
         ActorComponent.init(self, game)
         self.lives = cfg.get('lives', 3)
+        self.livesTag = cfg.get('livesTag', 'lives')
+        self.livesNumberTag = cfg.get('livesNumberTag', 'livesNumber')
         self.playerTag = cfg.get('playerTag', 'gun')
         game.eventManager.bind(on_alienarmy_dead=self._handleAlienArmyDead)
         game.eventManager.bind(on_collision=self._handleCollision)
@@ -45,7 +47,10 @@ class ClasicSceneComponent(ActorComponent):
                 self.game.addActions(self.actorId, [
                     {'name': 'nextScene', 'params': self.actorId }
                 ])
-
+            livesActor = self.game.findActorByTag(self.livesTag)
+            livesActor.getComponent('Render').frame += 1
+            livesNumberActor = self.game.findActorByTag(self.livesNumberTag)
+            livesNumberActor.getComponent('Render').setValue(self.lives)
     # def update(self, deltTime):
     #     if True in self.game.userInput:
     #         self.game.addActions(

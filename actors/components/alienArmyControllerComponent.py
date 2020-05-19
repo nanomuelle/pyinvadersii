@@ -71,10 +71,10 @@ class AlienArmyControllerComponent(ActorComponent):
 
         if alienId:
             alien = self.getActor(alienId)
-            # explosion = self._createExplosionActor(alien.getPos())
+            explosion = self._createExplosionActor(alien.getPos())
             self.game.addActions(self.actorId, [
                 {'name': 'removeActor', 'params': alienId },
-                # {'name': 'addActor', 'params': explosion }
+                {'name': 'addActor', 'params': explosion }
             ])
             self.aliens.remove(alienId)
             if len(self.aliens) == 0:
