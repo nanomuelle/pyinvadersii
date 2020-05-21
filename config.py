@@ -114,7 +114,63 @@ gameConfig = {
                 ]}
             },
         },
-        "alien": {
+        "alien1": {
+            "tag": "alien",
+            "components": {
+                "Transform": {},
+                "Physics": {
+                    "size": (1.0, 1.0),
+                    "minX": 1,
+                    "maxX": cols - 4,
+                    "collisionGroup": "alien",
+                },
+                "AlienController": {"fireProb": 0.0005},
+                "FireController": {
+                    "ammoCapacity": 1,
+                    "ammo": 1,
+                    "rowOffset": 1,
+                    "colOffset": 1,
+                    "bullet": "alien-bullet",
+                },
+                "AnsiRender": {
+                    "sprite": [
+                        [c.FG_COLOR_CYAN + "M" + c.RESET],
+                        [c.FG_COLOR_CYAN + "Y" + c.RESET]
+                    ],
+                    "frame": 0,
+                    "animationTime": 0.5
+                }
+            }
+        },
+        "alien2": {
+            "tag": "alien",
+            "components": {
+                "Transform": {},
+                "Physics": {
+                    "size": (2.0, 1.0),
+                    "minX": 1,
+                    "maxX": cols - 4,
+                    "collisionGroup": "alien",
+                },
+                "AlienController": {"fireProb": 0.0005},
+                "FireController": {
+                    "ammoCapacity": 1,
+                    "ammo": 1,
+                    "rowOffset": 1,
+                    "colOffset": 1,
+                    "bullet": "alien-bullet",
+                },
+                "AnsiRender": {
+                    "sprite": [
+                        [c.FG_COLOR_CYAN + "┌", "H", "┐" + c.RESET],
+                        [c.FG_COLOR_CYAN + "└", "H", "┘" + c.RESET]
+                    ],
+                    "frame": 0,
+                    "animationTime": 0.5
+                }
+            }
+        },
+        "alien3": {
             "tag": "alien",
             "components": {
                 "Transform": {},
@@ -134,8 +190,8 @@ gameConfig = {
                 },
                 "AnsiRender": {
                     "sprite": [
-                        [c.FG_COLOR_CYAN + "╒", "H", "╕" + c.RESET],
-                        [c.FG_COLOR_CYAN + "╘", "H", "╛" + c.RESET]
+                        [c.FG_COLOR_CYAN + "╓", "O", "╖" + c.RESET],
+                        [c.FG_COLOR_CYAN + "╙", "O", "╜" + c.RESET]
                     ],
                     "frame": 0,
                     "animationTime": 0.5
@@ -212,7 +268,6 @@ gameConfig = {
             }
         },
         "score": {
-            "tag": "score",
             "components": {
                 "Transform": {"pos": (4.5, 1.5)},
                 "ScoreController": {"pointsPerAlien": 10},
@@ -298,7 +353,32 @@ gameConfig = {
                     } 
                 },
                 # score 1
-                {"template": "score"},
+                {
+                    "tag": "score1",
+                    "template": "score"
+                },
+                # hiscore
+                {
+                    "tag": "hiscore",
+                    "components": {
+                        "Transform": {"pos": (20, 1.5)},
+                        "TextRender": {
+                            "text": "{}",
+                            "value": '000000'
+                        }
+                    }
+                },
+                # score2
+                {
+                    "tag": "score2",
+                    "components": {
+                        "Transform": {"pos": (35, 1.5)},
+                        "TextRender": {
+                            "text": "{}",
+                            "value": '000000'
+                        }
+                    }
+                },
                 # footer
                 {
                     "components": {
@@ -313,13 +393,13 @@ gameConfig = {
                 {
                     "tag": "lives",
                     "components": {
-                        "Transform": {"pos": (5.5, rows - 0.5)},
+                        "Transform": {"pos": (7.5, rows - 0.5)},
                         "AnsiRender": {
                             "sprite": [
-                                [c.FG_COLOR_WHITE + "╧", " ", "╧", " ", "╧" + c.RESET],
-                                [c.FG_COLOR_WHITE + "╧", " ", "╧", " ", " " + c.RESET],
-                                [c.FG_COLOR_WHITE + "╧", " ", " ", " ", " " + c.RESET],
-                                [c.FG_COLOR_WHITE + " ", " ", " ", " ", " " + c.RESET],
+                                [c.FG_COLOR_GREEN + "╔", "╧", "╗", "╔", "╧", "╗", "╔", "╧", "╗" + c.RESET],
+                                [c.FG_COLOR_GREEN + "╔", "╧", "╗", "╔", "╧", "╗", " ", " ", " " + c.RESET],
+                                [c.FG_COLOR_GREEN + "╔", "╧", "╗", " ", " ", " ", " ", " ", " " + c.RESET],
+                                [c.FG_COLOR_GREEN + " ", " ", " ", " ", " ", " ", " ", " ", " " + c.RESET],
                             ]
                         }
                     }
@@ -369,12 +449,11 @@ gameConfig = {
                 # alienArmy"
                 {"tag": "alien-army", "components": {
                     "AlienArmyController": {
-                        "alienActor": "alien",
                         "explosionActor": "alien-explosion",
                         # "ufoTag": "ufo",
                         "vel": 1.0,
                         "ivel": 0.2,
-                        "rows": 4,
+                        "rows": ["alien1", "alien2", "alien2", "alien3", "alien3"],
                         "perRow": 8,
                         "step": 4,
                         "initialRow": 3.5,

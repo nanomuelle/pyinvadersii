@@ -10,10 +10,10 @@ class AlienArmyControllerComponent(ActorComponent):
 
     def init(self, game, cfg):
         ActorComponent.init(self, game)
-        self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienActor')))
+        # self.alienCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('alienActor')))
         self.explosionCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('explosionActor')))
         # self.ufoCfg = copy.deepcopy(game.actorPatterns.get(cfg.get('ufoTag')))
-        self.rows = cfg.get("rows", 4)
+        self.rows = cfg.get("rows", [])
         self.perRow = cfg.get("perRow", 8)
         self.step = cfg.get("step", 4)
         self.initialRow = cfg.get("initialRow", 1)
@@ -31,12 +31,13 @@ class AlienArmyControllerComponent(ActorComponent):
     def createAliens(self):
         self.vel = self.initialVel
         self.ivel = self.initialIVel
-        self.alienCfg['components']['AlienController']['fireProb'] += 0.001
+        # self.alienCfg['components']['AlienController']['fireProb'] += 0.001
         self.aliens = []
-        for rowIndex in range(self.rows):
+        for rowIndex in range(len(self.rows)):
+            alienCfg = self.game.actorPatterns.get(self.rows[rowIndex])
             row = self.initialRow + rowIndex
             for index in range(self.perRow):
-                alien = self.game.createActor(self.alienCfg)
+                alien = self.game.createActor(alienCfg)
                 alien.setPos((self.initialCol + (index * self.step),row))
                 alien.getComponent('Physics').vel = (self.vel, 0.0)
                 self.game.addActions(
